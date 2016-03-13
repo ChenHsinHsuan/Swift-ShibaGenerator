@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gog-3i-3Df">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <scenes>
+        <!--柴犬回文圖產生器-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="ShibaGenerator" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l8u-Sk-vJQ">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Shiba" translatesAutoresizingMaskIntoConstraints="NO" id="t1z-dM-COT">
+                                        <rect key="frame" x="0.0" y="20" width="320" height="390"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="t1z-dM-COT" secondAttribute="height" multiplier="32:39" id="dmE-wb-etQ"/>
+                                        </constraints>
+                                    </imageView>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="32" minValue="16" maxValue="32" translatesAutoresizingMaskIntoConstraints="NO" id="yqF-ed-zHI">
+                                        <rect key="frame" x="18" y="466" width="284" height="31"/>
+                                        <connections>
+                                            <action selector="fontSizeChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="3gN-l0-RCA"/>
+                                        </connections>
+                                    </slider>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="點我輸入文字" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GIf-7V-QRe">
+                                        <rect key="frame" x="20" y="428" width="280" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="4dL-76-ko6"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="ehm-Dr-5Th"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你想說什麼。。。" textAlignment="natural" lineBreakMode="characterWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cmw-qy-iaX">
+                                        <rect key="frame" x="40" y="20" width="30" height="390"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="390" id="DQS-IE-HMI"/>
+                                            <constraint firstAttribute="width" constant="30" id="X8d-CA-DVr"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="t1z-dM-COT" firstAttribute="leading" secondItem="l8u-Sk-vJQ" secondAttribute="leading" id="2kb-3T-yMR"/>
+                                    <constraint firstItem="GIf-7V-QRe" firstAttribute="leading" secondItem="l8u-Sk-vJQ" secondAttribute="leading" constant="20" id="5s7-GO-Tr1"/>
+                                    <constraint firstItem="t1z-dM-COT" firstAttribute="centerX" secondItem="l8u-Sk-vJQ" secondAttribute="centerX" id="6ms-KR-bt1"/>
+                                    <constraint firstItem="yqF-ed-zHI" firstAttribute="top" secondItem="GIf-7V-QRe" secondAttribute="bottom" constant="8" symbolic="YES" id="85o-A4-ESG"/>
+                                    <constraint firstItem="cmw-qy-iaX" firstAttribute="leading" secondItem="l8u-Sk-vJQ" secondAttribute="leading" constant="40" id="Fwo-Wm-fpD"/>
+                                    <constraint firstItem="t1z-dM-COT" firstAttribute="top" secondItem="cmw-qy-iaX" secondAttribute="top" id="GQo-9B-U1I"/>
+                                    <constraint firstItem="t1z-dM-COT" firstAttribute="centerX" secondItem="GIf-7V-QRe" secondAttribute="centerX" id="Q7l-Oy-lSN"/>
+                                    <constraint firstItem="yqF-ed-zHI" firstAttribute="leading" secondItem="GIf-7V-QRe" secondAttribute="leading" id="Tpi-xF-mqh"/>
+                                    <constraint firstItem="t1z-dM-COT" firstAttribute="bottom" secondItem="cmw-qy-iaX" secondAttribute="bottom" id="bIC-Eo-0mo"/>
+                                    <constraint firstItem="cmw-qy-iaX" firstAttribute="top" secondItem="l8u-Sk-vJQ" secondAttribute="top" constant="20" id="lqg-u7-bbw"/>
+                                    <constraint firstAttribute="bottom" secondItem="yqF-ed-zHI" secondAttribute="bottom" constant="8" id="qTk-Kd-AiY"/>
+                                    <constraint firstAttribute="trailing" secondItem="GIf-7V-QRe" secondAttribute="trailing" constant="20" id="sm4-J2-VbQ"/>
+                                    <constraint firstItem="yqF-ed-zHI" firstAttribute="trailing" secondItem="GIf-7V-QRe" secondAttribute="trailing" id="utD-eO-KDr"/>
+                                    <constraint firstItem="GIf-7V-QRe" firstAttribute="top" secondItem="cmw-qy-iaX" secondAttribute="bottom" constant="18" id="xyq-59-gRM"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="l8u-Sk-vJQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7ww-Mw-p7h"/>
+                            <constraint firstAttribute="trailing" secondItem="l8u-Sk-vJQ" secondAttribute="trailing" id="Hjp-0S-Fib"/>
+                            <constraint firstItem="l8u-Sk-vJQ" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="RN6-vl-7tg"/>
+                            <constraint firstItem="l8u-Sk-vJQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="ycB-64-EPl"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="柴犬回文圖產生器" id="Q9R-Fx-Yj3">
+                        <barButtonItem key="rightBarButtonItem" title="匯出" style="done" id="T50-jb-TPi">
+                            <connections>
+                                <action selector="convertPhoto:" destination="BYZ-38-t0r" id="KfU-Pb-iyw"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="demoLabel" destination="cmw-qy-iaX" id="gmI-id-EtV"/>
+                        <outlet property="fontsizeSlider" destination="yqF-ed-zHI" id="3LM-oK-onF"/>
+                        <outlet property="inputTextField" destination="GIf-7V-QRe" id="Hhb-55-KAg"/>
+                        <outlet property="scrollView" destination="l8u-Sk-vJQ" id="w9b-rr-l6r"/>
+                        <outlet property="shibaImageView" destination="t1z-dM-COT" id="91c-29-b32"/>
+                        <segue destination="cQJ-zO-pDu" kind="show" identifier="ExportSegue" id="Zsi-mm-674"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1034" y="657"/>
+        </scene>
+        <!--Result View Controller-->
+        <scene sceneID="Soq-f2-Ssg">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="cQJ-zO-pDu" customClass="ResultViewController" customModule="ShibaGenerator" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ra6-tA-Gay"/>
+                        <viewControllerLayoutGuide type="bottom" id="tH7-hP-vhe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="L81-m4-vzo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Y-cQ-DFW">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q1c-YZ-OdG">
+                                        <rect key="frame" x="0.0" y="25" width="320" height="390"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="390" id="Yba-H3-ehk"/>
+                                            <constraint firstAttribute="width" secondItem="q1c-YZ-OdG" secondAttribute="height" multiplier="32:39" id="bkP-sr-7OK"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TEs-UV-jVM">
+                                        <rect key="frame" x="100" y="436" width="120" height="48"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <state key="normal" title="點我儲存"/>
+                                        <connections>
+                                            <action selector="saveButtonPressed:" destination="cQJ-zO-pDu" eventType="touchUpInside" id="OG5-qa-bgk"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="TEs-UV-jVM" secondAttribute="bottom" constant="20" id="5XB-oB-1OH"/>
+                                    <constraint firstItem="q1c-YZ-OdG" firstAttribute="top" secondItem="Z8Y-cQ-DFW" secondAttribute="top" constant="25" id="88V-Rf-hhg"/>
+                                    <constraint firstAttribute="trailing" secondItem="q1c-YZ-OdG" secondAttribute="trailing" id="9fp-pE-Phn"/>
+                                    <constraint firstItem="TEs-UV-jVM" firstAttribute="top" secondItem="q1c-YZ-OdG" secondAttribute="bottom" constant="21" id="D6R-kt-Z0r"/>
+                                    <constraint firstItem="TEs-UV-jVM" firstAttribute="centerX" secondItem="Z8Y-cQ-DFW" secondAttribute="centerX" id="Pto-dn-0vs"/>
+                                    <constraint firstItem="q1c-YZ-OdG" firstAttribute="leading" secondItem="Z8Y-cQ-DFW" secondAttribute="leading" id="Xhk-f1-gAU"/>
+                                    <constraint firstItem="q1c-YZ-OdG" firstAttribute="centerX" secondItem="TEs-UV-jVM" secondAttribute="centerX" id="ajg-t9-mNT"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Z8Y-cQ-DFW" secondAttribute="trailing" id="0iN-0p-asX"/>
+                            <constraint firstItem="Z8Y-cQ-DFW" firstAttribute="bottom" secondItem="tH7-hP-vhe" secondAttribute="top" id="9Ys-75-9eW"/>
+                            <constraint firstItem="Z8Y-cQ-DFW" firstAttribute="leading" secondItem="L81-m4-vzo" secondAttribute="leading" id="cTC-AT-Vhd"/>
+                            <constraint firstItem="Z8Y-cQ-DFW" firstAttribute="top" secondItem="ra6-tA-Gay" secondAttribute="bottom" id="lkR-d4-s9V"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="resultImageView" destination="q1c-YZ-OdG" id="w0D-s9-4aI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5f8-qe-zqO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1529" y="657"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Pek-bg-8tG">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gog-3i-3Df" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9Nj-dv-kYe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="1vQ-QW-6XX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bxd-1x-oNY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="520" y="657"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Shiba" width="527" height="640"/>
+    </resources>
+    <color key="tintColor" red="1" green="0.02720980208149526" blue="0.084603054456655613" alpha="1" colorSpace="calibratedRGB"/>
+</document>
