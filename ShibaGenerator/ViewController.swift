@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Photos
 class ViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var demoLabel: UILabel!
@@ -35,6 +35,28 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         
         self.view.addGestureRecognizer(tap)
+        
+        
+        // ask photo permission
+        PHPhotoLibrary.requestAuthorization({(status:PHAuthorizationStatus) in
+            switch status{
+            case .Authorized:
+                dispatch_async(dispatch_get_main_queue(), {
+                    print("Authorized")
+                })
+                break
+            case .Denied:
+                dispatch_async(dispatch_get_main_queue(), {
+                    print("Denied")
+                })
+                break
+            default:
+                dispatch_async(dispatch_get_main_queue(), {
+                    print("Default")
+                })
+                break
+            }
+        })
         
     }
     

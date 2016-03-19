@@ -62,6 +62,10 @@ class ResultViewController: UIViewController{
             let alertView = UIAlertController(title: "匯出失敗", message:  "請至設定>隱私權>照片>將柴犬產生器的權限打開唷!!", preferredStyle: UIAlertControllerStyle.Alert)
             alertView.addAction(okAciton)
             self.presentViewController(alertView, animated: true, completion: nil)
+            
+            PHPhotoLibrary.requestAuthorization({ (status) -> Void in
+                
+            })
         }
         
 

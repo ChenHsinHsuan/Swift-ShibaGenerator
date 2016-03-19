@@ -8,6 +8,8 @@
 
 import UIKit
 import GoogleMobileAds
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
@@ -20,6 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
         // Override point for customization after application launch.
         
         myInterstitial = createAndLoadInterstitial()
+        
+        
+        Fabric.with([Crashlytics.self])
+
         
         return true
     }
