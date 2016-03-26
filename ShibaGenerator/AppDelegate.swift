@@ -62,8 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
     }
     
     func interstitialDidDismissScreen(ad: GADInterstitial!) {
-        print("interstitialDidDismissScreen")
         myInterstitial = createAndLoadInterstitial()
+        
+    
     }
     
     func createAndLoadInterstitial()->GADInterstitial {

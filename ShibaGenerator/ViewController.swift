@@ -8,7 +8,8 @@
 
 import UIKit
 import Photos
-class ViewController: UIViewController, UITextFieldDelegate {
+
+class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate {
 
     @IBOutlet weak var demoLabel: UILabel!
     
@@ -19,52 +20,60 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var fontsizeSlider: UISlider!
     
     @IBOutlet weak var shibaImageView: UIImageView!
+
+    @IBOutlet weak var demoTextWidthLayoutConstraint: NSLayoutConstraint!
+
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var exportImage:UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
         // Do any additional setup after loading the view, typically from a nib.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillBeHidden", name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldTextDidChangeOneCI:", name: UITextFieldTextDidChangeNotification, object: inputTextField)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(ViewController.keyboardWasShown(_:)), name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(ViewController.keyboardWillBeHidden), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.textFieldTextDidChangeOneCI(_:)), name: UITextFieldTextDidChangeNotification, object: inputTextField)
         
         
         //MARK: guesture
         
-        let tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         
         self.view.addGestureRecognizer(tap)
         
         
         // ask photo permission
         PHPhotoLibrary.requestAuthorization({(status:PHAuthorizationStatus) in
-            switch status{
-            case .Authorized:
-                dispatch_async(dispatch_get_main_queue(), {
-                    print("Authorized")
-                })
-                break
-            case .Denied:
-                dispatch_async(dispatch_get_main_queue(), {
-                    print("Denied")
-                })
-                break
-            default:
-                dispatch_async(dispatch_get_main_queue(), {
-                    print("Default")
-                })
-                break
-            }
+//            switch status{
+//            case .Authorized:
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    print("Authorized")
+//                })
+//                break
+//            case .Denied:
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    print("Denied")
+//                })
+//                break
+//            default:
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    print("Default")
+//                })
+//                break
+//            }
         })
         
     }
-    
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     func dismissKeyboard(){
         self.inputTextField.resignFirstResponder()
@@ -118,13 +127,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func fontSizeChange(sender: UISlider) {
         self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
+        
+        self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
+        
+        self.demoLabel.layoutIfNeeded()
+        
     }
     
-    
+
     @IBAction func convertPhoto(sender: AnyObject) {
         
+
         if(self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0){
-            let alertView = UIAlertController(title: "柴犬不知道你要說什麼", message:  "請於下方輸入格輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
+            let alertView = UIAlertController(title: "我不知道你要說什麼", message:  "請於下方輸入格輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
             let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
             alertView.addAction(okAciton)
             self.presentViewController(alertView, animated: true, completion: nil)
@@ -136,18 +151,30 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         
         
-        UIGraphicsBeginImageContextWithOptions(self.shibaImageView.frame.size, true, 0.0)
-        self.shibaImageView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        
-        
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext()!, 40, 0)
-        self.demoLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        self.exportImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
+        self.genImage()
         
         performSegueWithIdentifier("ExportSegue", sender: self)
-
+        
+        
+       
+    }
+    
+    
+    @IBAction func changeImage(sender: AnyObject) {
+        
+        if self.shibaImageView.image == UIImage(named: "Shiba") {
+            self.shibaImageView.image = UIImage(named: "gr");
+        }else if self.shibaImageView.image == UIImage(named: "gr") {
+            self.shibaImageView.image = UIImage(named: "fado");
+        }else if self.shibaImageView.image == UIImage(named: "fado") {
+            self.shibaImageView.image = UIImage(named: "sulai");
+        }else if self.shibaImageView.image == UIImage(named: "sulai") {
+            self.shibaImageView.image = UIImage(named: "corgi");
+        }else if self.shibaImageView.image == UIImage(named: "corgi") {
+            self.shibaImageView.image = UIImage(named: "Shiba");
+        }else{
+            self.shibaImageView.image = UIImage(named: "Shiba");
+        }
     }
     
     
@@ -163,6 +190,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
             resultVC.exportImage = self.exportImage!
         }
     }
+    
+    
+    // MARK: 產生圖片
+    func genImage() {
+        let image = self.shibaImageView
+        UIGraphicsBeginImageContextWithOptions(image.frame.size, true, 0.0)
+        image.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext()!, 40, 0)
+        self.demoLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        self.exportImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+    }
+    
 
+    
 }
-
