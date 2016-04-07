@@ -9,7 +9,8 @@
 import UIKit
 import Photos
 
-class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate {
+
+class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, DBRestClientDelegate {
 
     @IBOutlet weak var demoLabel: UILabel!
     
@@ -26,6 +27,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var exportImage:UIImage?
+    
+    
+
+    
+    
+    var dbClient = DBRestClient()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,26 +55,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         
         // ask photo permission
         PHPhotoLibrary.requestAuthorization({(status:PHAuthorizationStatus) in
-//            switch status{
-//            case .Authorized:
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    print("Authorized")
-//                })
-//                break
-//            case .Denied:
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    print("Denied")
-//                })
-//                break
-//            default:
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    print("Default")
-//                })
-//                break
-//            }
+
         })
         
+        
+        
+        
+        //TODO
+        print("linked:\(DBSession.sharedSession().isLinked())")
+
+        
     }
+
 
     
     override func didReceiveMemoryWarning() {
@@ -162,19 +162,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     @IBAction func changeImage(sender: AnyObject) {
         
-        if self.shibaImageView.image == UIImage(named: "Shiba") {
-            self.shibaImageView.image = UIImage(named: "gr");
-        }else if self.shibaImageView.image == UIImage(named: "gr") {
-            self.shibaImageView.image = UIImage(named: "fado");
-        }else if self.shibaImageView.image == UIImage(named: "fado") {
-            self.shibaImageView.image = UIImage(named: "sulai");
-        }else if self.shibaImageView.image == UIImage(named: "sulai") {
-            self.shibaImageView.image = UIImage(named: "corgi");
-        }else if self.shibaImageView.image == UIImage(named: "corgi") {
-            self.shibaImageView.image = UIImage(named: "Shiba");
-        }else{
-            self.shibaImageView.image = UIImage(named: "Shiba");
-        }
+//        if self.shibaImageView.image == UIImage(named: "Shiba") {
+//            self.shibaImageView.image = UIImage(named: "gr");
+//        }else if self.shibaImageView.image == UIImage(named: "gr") {
+//            self.shibaImageView.image = UIImage(named: "fado");
+//        }else if self.shibaImageView.image == UIImage(named: "fado") {
+//            self.shibaImageView.image = UIImage(named: "sulai");
+//        }else if self.shibaImageView.image == UIImage(named: "sulai") {
+//            self.shibaImageView.image = UIImage(named: "corgi");
+//        }else if self.shibaImageView.image == UIImage(named: "corgi") {
+//            self.shibaImageView.image = UIImage(named: "Shiba");
+//        }else{
+//            self.shibaImageView.image = UIImage(named: "Shiba");
+//        }
     }
     
     
@@ -203,6 +203,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         UIGraphicsEndImageContext()
     }
     
+    
+    func restClient(client: DBRestClient!, loadedMetadata metadata: DBMetadata!) {
+        if metadata.isDirectory {
+            print("Folder\(metadata.path)")
+            for file in metadata.contents {
+                print("file name:\(file.filename)")
+            }
+        }
+    }
+    
+    
+    func restClient(client: DBRestClient!, loadMetadataFailedWithError error: NSError!) {
+        print("Error loading metadata:\(error)")
+    }
+    
 
     
+    
+    
+    func restClient(client: DBRestClient!, loadedAccountInfo info: DBAccountInfo!) {
+        print("userid:\(info.userId)")
+    }
+    
+
 }

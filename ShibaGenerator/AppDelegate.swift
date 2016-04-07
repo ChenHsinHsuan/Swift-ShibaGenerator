@@ -11,13 +11,22 @@ import GoogleMobileAds
 import Fabric
 import Crashlytics
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
 
     var window: UIWindow?
 
     var myInterstitial : GADInterstitial?
-
+    
+    
+    let DROPBOX_APPKEY = "b9z3jzpe7ykso0k"
+    let DROPBOX_APPSECRET = "1oezloahrcrnz92"
+    let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAAAZe46k0bp_YRog9wwHCbyqJAYKonZy7hxeYU461wmXmLD"
+    
+    
+    
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -26,6 +35,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
         
         Fabric.with([Crashlytics.self])
 
+        
+        let dbSession = DBSession(appKey: DROPBOX_APPKEY, appSecret: DROPBOX_APPSECRET, root: kDBRootAppFolder)
+        
+        if dbSession.isLinked() {
+            print("link successful.....")
+        }
+        
+        DBSession.setSharedSession(dbSession)
         
         return true
     }
@@ -74,7 +91,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
         return interstitial
     }
     
+//    
+//    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+//        if DBSession.sharedSession().handleOpenURL(url) {
+//            if DBSession.sharedSession().isLinked(){
+//                print("link successfully!!")
+//                self.restClient?.delegate = ViewController()
+//                self.restClient?.loadAccountInfo()
+//                
+//            }
+//            return true
+//        }
+//        
+//        return false
+//    }
+//    
     
+
     
 }
 

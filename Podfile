@@ -1,4 +1,4 @@
-platform :ios, '8.2'
+platform :ios, '8.0'
 use_frameworks!
 
 target 'ShibaGenerator' do
@@ -8,5 +8,4 @@ pod 'Crashlytics'
 pod 'LineKit'
 pod 'ImgurAnonymousAPIClient'
 pod 'MBProgressHUD'
-
 end

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3CF17DEF4A96D497822883EA /* Pods_ShibaGenerator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDDA46E0DBEC019946E31626 /* Pods_ShibaGenerator.framework */; };
 		8F2F200B1C958AFB0083C6FA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200A1C958AFB0083C6FA /* AdSupport.framework */; };
 		8F2F20131C958B2B0083C6FA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200C1C958B2B0083C6FA /* AudioToolbox.framework */; };
 		8F2F20141C958B2B0083C6FA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200D1C958B2B0083C6FA /* AVFoundation.framework */; };
@@ -26,6 +25,10 @@
 		8F4C32311C95178800A3C58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F4C32301C95178800A3C58A /* Assets.xcassets */; };
 		8F4C32341C95178800A3C58A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F4C32321C95178800A3C58A /* LaunchScreen.storyboard */; };
 		8F4C323C1C9573D600A3C58A /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C323B1C9573D600A3C58A /* ResultViewController.swift */; };
+		8FB9A32C1CB55C9000001A42 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB9A32B1CB55C9000001A42 /* DropboxSDK.framework */; };
+		8FB9A32E1CB55CA800001A42 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB9A32D1CB55CA800001A42 /* Security.framework */; };
+		8FB9A3301CB55CAF00001A42 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB9A32F1CB55CAF00001A42 /* QuartzCore.framework */; };
+		DD29D0DCE0715E836BA7B5EB /* Pods_ShibaGenerator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0B0BD557F36120ACB383C44 /* Pods_ShibaGenerator.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,8 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0592D902ABE99747203745BC /* Pods-ShibaGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.debug.xcconfig"; sourceTree = "<group>"; };
-		5FFBEBB53116E60702D51E8F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		74679F82480B8EEF7496B26A /* Pods-ShibaGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.debug.xcconfig"; sourceTree = "<group>"; };
+		82CACE3E7FE00F0E29190C31 /* Pods-ShibaGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.release.xcconfig"; sourceTree = "<group>"; };
 		8F2F200A1C958AFB0083C6FA /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		8F2F200C1C958B2B0083C6FA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8F2F200D1C958B2B0083C6FA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -67,9 +70,11 @@
 		8F4C32331C95178800A3C58A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F4C32351C95178800A3C58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F4C323B1C9573D600A3C58A /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		8FB9A32B1CB55C9000001A42 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
+		8FB9A32D1CB55CA800001A42 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8FB9A32F1CB55CAF00001A42 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8FBD07841CA6702300CA6C33 /* ShibaGenerator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShibaGenerator-Bridging-Header.h"; sourceTree = "<group>"; };
-		BDDA46E0DBEC019946E31626 /* Pods_ShibaGenerator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShibaGenerator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA9FFFE2B35A928151B03199 /* Pods-ShibaGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.release.xcconfig"; sourceTree = "<group>"; };
+		F0B0BD557F36120ACB383C44 /* Pods_ShibaGenerator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShibaGenerator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,27 +82,42 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FB9A3301CB55CAF00001A42 /* QuartzCore.framework in Frameworks */,
+				8FB9A32E1CB55CA800001A42 /* Security.framework in Frameworks */,
 				8F2F201F1C958B3C0083C6FA /* SystemConfiguration.framework in Frameworks */,
 				8F2F201D1C958B360083C6FA /* StoreKit.framework in Frameworks */,
 				8F2F201B1C958B310083C6FA /* MessageUI.framework in Frameworks */,
 				8F2F20131C958B2B0083C6FA /* AudioToolbox.framework in Frameworks */,
 				8F2F20141C958B2B0083C6FA /* AVFoundation.framework in Frameworks */,
+				8FB9A32C1CB55C9000001A42 /* DropboxSDK.framework in Frameworks */,
 				8F2F20151C958B2B0083C6FA /* CoreGraphics.framework in Frameworks */,
 				8F2F20161C958B2B0083C6FA /* CoreMedia.framework in Frameworks */,
 				8F2F20171C958B2B0083C6FA /* CoreTelephony.framework in Frameworks */,
 				8F2F20181C958B2B0083C6FA /* EventKit.framework in Frameworks */,
 				8F2F20191C958B2B0083C6FA /* EventKitUI.framework in Frameworks */,
 				8F2F200B1C958AFB0083C6FA /* AdSupport.framework in Frameworks */,
-				3CF17DEF4A96D497822883EA /* Pods_ShibaGenerator.framework in Frameworks */,
+				DD29D0DCE0715E836BA7B5EB /* Pods_ShibaGenerator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		195F0E618910E604D3A598FE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				74679F82480B8EEF7496B26A /* Pods-ShibaGenerator.debug.xcconfig */,
+				82CACE3E7FE00F0E29190C31 /* Pods-ShibaGenerator.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		7261886218078062329DBC0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8FB9A32F1CB55CAF00001A42 /* QuartzCore.framework */,
+				8FB9A32D1CB55CA800001A42 /* Security.framework */,
+				8FB9A32B1CB55C9000001A42 /* DropboxSDK.framework */,
 				8F2F201E1C958B3C0083C6FA /* SystemConfiguration.framework */,
 				8F2F201C1C958B360083C6FA /* StoreKit.framework */,
 				8F2F201A1C958B310083C6FA /* MessageUI.framework */,
@@ -109,8 +129,7 @@
 				8F2F20111C958B2B0083C6FA /* EventKit.framework */,
 				8F2F20121C958B2B0083C6FA /* EventKitUI.framework */,
 				8F2F200A1C958AFB0083C6FA /* AdSupport.framework */,
-				5FFBEBB53116E60702D51E8F /* Pods.framework */,
-				BDDA46E0DBEC019946E31626 /* Pods_ShibaGenerator.framework */,
+				F0B0BD557F36120ACB383C44 /* Pods_ShibaGenerator.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -121,7 +140,7 @@
 				8F4C32281C95178700A3C58A /* ShibaGenerator */,
 				8F4C32271C95178700A3C58A /* Products */,
 				7261886218078062329DBC0D /* Frameworks */,
-				AA25267F3F2BBDBBE97C400C /* Pods */,
+				195F0E618910E604D3A598FE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,15 +168,6 @@
 			path = ShibaGenerator;
 			sourceTree = "<group>";
 		};
-		AA25267F3F2BBDBBE97C400C /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				0592D902ABE99747203745BC /* Pods-ShibaGenerator.debug.xcconfig */,
-				EA9FFFE2B35A928151B03199 /* Pods-ShibaGenerator.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -165,15 +175,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8F4C32381C95178800A3C58A /* Build configuration list for PBXNativeTarget "ShibaGenerator" */;
 			buildPhases = (
-				A11B6C4EBB0D539A8875D241 /* 📦 Check Pods Manifest.lock */,
+				CA6D2E8EFEC765F0977A45BC /* 📦 Check Pods Manifest.lock */,
 				8F4C32221C95178700A3C58A /* Sources */,
 				8F4C32231C95178700A3C58A /* Frameworks */,
 				8F4C32241C95178700A3C58A /* Resources */,
 				8F3D30D81C9D76A700A5C335 /* ShellScript */,
 				8FBD07801CA647B300CA6C33 /* Embed App Extensions */,
 				8FBD07871CA670B300CA6C33 /* ShellScript */,
-				853426F72962ABC40592D73B /* 📦 Embed Pods Frameworks */,
-				B97D320B0637B6461F79FFD4 /* 📦 Copy Pods Resources */,
+				DA43FB6058BAA41780108AAB /* 📦 Embed Pods Frameworks */,
+				55C1A7153CE7E72B11E0EC67 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -235,19 +245,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		853426F72962ABC40592D73B /* 📦 Embed Pods Frameworks */ = {
+		55C1A7153CE7E72B11E0EC67 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8F3D30D81C9D76A700A5C335 /* ShellScript */ = {
@@ -276,7 +286,7 @@
 			shellPath = /bin/sh;
 			shellScript = "Auto increment the build number\n#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n";
 		};
-		A11B6C4EBB0D539A8875D241 /* 📦 Check Pods Manifest.lock */ = {
+		CA6D2E8EFEC765F0977A45BC /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -291,19 +301,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		B97D320B0637B6461F79FFD4 /* 📦 Copy Pods Resources */ = {
+		DA43FB6058BAA41780108AAB /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -388,7 +398,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -426,7 +436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -435,14 +445,19 @@
 		};
 		8F4C32391C95178800A3C58A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0592D902ABE99747203745BC /* Pods-ShibaGenerator.debug.xcconfig */;
+			baseConfigurationReference = 74679F82480B8EEF7496B26A /* Pods-ShibaGenerator.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/ShibaGenerator",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -453,8 +468,9 @@
 					"\"${PODS_ROOT}/Headers/Public/ImgurAnonymousAPIClient\"",
 				);
 				INFOPLIST_FILE = ShibaGenerator/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aircon.ShibaGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -465,14 +481,19 @@
 		};
 		8F4C323A1C95178800A3C58A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EA9FFFE2B35A928151B03199 /* Pods-ShibaGenerator.release.xcconfig */;
+			baseConfigurationReference = 82CACE3E7FE00F0E29190C31 /* Pods-ShibaGenerator.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/ShibaGenerator",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -483,8 +504,9 @@
 					"\"${PODS_ROOT}/Headers/Public/ImgurAnonymousAPIClient\"",
 				);
 				INFOPLIST_FILE = ShibaGenerator/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aircon.ShibaGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
