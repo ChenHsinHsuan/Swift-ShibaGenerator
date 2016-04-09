@@ -37,7 +37,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     var localPhotoFilesPath:NSURL!
     var localNewsFilePath:NSURL!
     
-    
+    var textAlignVertical = true
     var photoIndex = 1
     var newPhotoCounter = 0
     var updatePhotoCounter = 0
@@ -144,7 +144,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     func textFieldTextDidChangeOneCI(notification:NSNotification){
         let textField = notification.object! as! UITextField
-        self.demoLabel.numberOfLines = 0;
+//        self.demoLabel.numberOfLines = 0;
         self.demoLabel.lineBreakMode = NSLineBreakMode.ByCharWrapping
         self.demoLabel.text = textField.text
     }
@@ -153,9 +153,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     @IBAction func fontSizeChange(sender: UISlider) {
         self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
         
-        self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
-        
-        self.demoLabel.layoutIfNeeded()
+        if textAlignVertical {
+            self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
+            self.demoLabel.layoutIfNeeded()
+        }
         
     }
     
@@ -522,5 +523,37 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             print("scan file error:\(error)")
         }
     }
+    
+    
+    
+    
+    
+    @IBOutlet weak var alignButton: UIButton!
+    
+    @IBAction func changeAlign(sender: AnyObject) {
+        
+        textAlignVertical = !textAlignVertical
+    
+        print("isAlignVertical:\(textAlignVertical)")
+        
+        
+        if textAlignVertical {
+            alignButton.selected = !textAlignVertical
+            demoTextWidthLayoutConstraint.constant = 39
+            self.demoLabel.layoutIfNeeded()
+        }else{
+            let screenWidth = UIScreen.mainScreen().bounds.size.width
+            alignButton.selected = !textAlignVertical
+            demoTextWidthLayoutConstraint.constant = screenWidth - 40 - 39
+        }
+        
+        
+        
+        
+    }
+    
+    
+    
+    
 
 }
