@@ -8,4 +8,5 @@ pod 'Crashlytics'
 pod 'LineKit'
 pod 'ImgurAnonymousAPIClient'
 pod 'MBProgressHUD'
+pod 'SwiftyDropbox', '~> 3.0.0'
 end

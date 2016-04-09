@@ -10,7 +10,12 @@ import UIKit
 import GoogleMobileAds
 import Fabric
 import Crashlytics
+import SwiftyDropbox
 
+
+let DROPBOX_APPKEY = "b9z3jzpe7ykso0k"
+let DROPBOX_APPSECRET = "1oezloahrcrnz92"
+let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAAAZe46k0bp_YRog9wwHCbyqJAYKonZy7hxeYU461wmXmLD"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
@@ -18,13 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
     var window: UIWindow?
 
     var myInterstitial : GADInterstitial?
-    
-    
-    let DROPBOX_APPKEY = "b9z3jzpe7ykso0k"
-    let DROPBOX_APPSECRET = "1oezloahrcrnz92"
-    let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAAAZe46k0bp_YRog9wwHCbyqJAYKonZy7hxeYU461wmXmLD"
-    
-    
+
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -36,14 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
         Fabric.with([Crashlytics.self])
 
         
-        let dbSession = DBSession(appKey: DROPBOX_APPKEY, appSecret: DROPBOX_APPSECRET, root: kDBRootAppFolder)
+//        Dropbox.setupWithAppKey(DROPBOX_APPKEY)
         
-        if dbSession.isLinked() {
-            print("link successful.....")
-        }
-        
-        DBSession.setSharedSession(dbSession)
-        
+        DropboxAuthManager.sharedAuthManager = DropboxAuthManager(appKey: DROPBOX_APPKEY)
+        Dropbox.authorizedClient = DropboxClient(accessToken: DropboxAccessToken(accessToken: DROPBOX_TOKEN, uid: "aircon.chen.apple@gmail.com"))
+        DropboxClient.sharedClient = Dropbox.authorizedClient
         return true
     }
 
@@ -68,15 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
-    func interstitialDidReceiveAd(ad: GADInterstitial!) {
-        print("interstitialDidReceiveAd")
-    }
-    
-    func interstitial(ad: GADInterstitial!, didFailToReceiveAdWithError error: GADRequestError!) {
-        print(error.localizedDescription)
-    }
     
     func interstitialDidDismissScreen(ad: GADInterstitial!) {
         myInterstitial = createAndLoadInterstitial()
@@ -91,23 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
         return interstitial
     }
     
-//    
-//    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-//        if DBSession.sharedSession().handleOpenURL(url) {
-//            if DBSession.sharedSession().isLinked(){
-//                print("link successfully!!")
-//                self.restClient?.delegate = ViewController()
-//                self.restClient?.loadAccountInfo()
-//                
-//            }
-//            return true
-//        }
-//        
-//        return false
-//    }
-//    
-    
-
     
 }
 
