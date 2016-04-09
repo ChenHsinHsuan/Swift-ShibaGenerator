@@ -11,7 +11,7 @@ import Photos
 import SwiftyDropbox
 import MBProgressHUD
 
-class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, DBRestClientDelegate, UITextViewDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, DBRestClientDelegate, UITextViewDelegate, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var demoLabel: UILabel!
     
@@ -345,6 +345,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         
     }
     
+    
+    @IBAction func colorPickerButtonPressed(sender: UIButton) {
+        let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("colorPickerPopover") as! ColorPickerViewController
+        popoverVC.modalPresentationStyle = .Popover
+        popoverVC.preferredContentSize = CGSizeMake(284, 446)
+        if let popoverController = popoverVC.popoverPresentationController {
+            popoverController.sourceView = sender
+            popoverController.sourceRect = CGRect(x: 0, y: 0, width: 85, height: 30)
+            popoverController.permittedArrowDirections = .Any
+            popoverController.delegate = self
+            popoverVC.delegate = self
+        }
+        presentViewController(popoverVC, animated: true, completion: nil)
+    }
+    
+    
+    func setButtonColor (color: UIColor) {
+        if textAlignVertical{
+            demoLabel.textColor = color
+        }else{
+            inputTextView.textColor = color
+        }
+    }
+    
+    // Override the iPhone behavior that presents a popover as fullscreen
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        // Return no adaptive presentation style, use default presentation behaviour
+        return .None
+    }
     
     
 
