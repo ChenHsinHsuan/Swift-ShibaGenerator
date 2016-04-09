@@ -11,7 +11,7 @@ import Photos
 import SwiftyDropbox
 import MBProgressHUD
 
-class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, DBRestClientDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, DBRestClientDelegate, UITextViewDelegate {
 
     @IBOutlet weak var demoLabel: UILabel!
     
@@ -25,15 +25,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
 
     @IBOutlet weak var demoTextWidthLayoutConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var inputTextView: UITextView!
+    
+    @IBOutlet weak var componentView: UIView!
+    
+    @IBOutlet weak var alignButton: UIButton!
+    
+    @IBOutlet weak var horizontalIntroLabel: UILabel!
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
     var exportImage:UIImage?
-    
     var localPhotoFiles:[String] = []
-
     let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
     let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-    
     var localPhotoFilesPath:NSURL!
     var localNewsFilePath:NSURL!
     
@@ -41,6 +44,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     var photoIndex = 1
     var newPhotoCounter = 0
     var updatePhotoCounter = 0
+    
+    var tempInputString = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
       
@@ -69,15 +75,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         scanLocalPhotoFiles()
         
         
-        
-        
-        if let client = Dropbox.authorizedClient {
-            syncPhoto(client)
-            syncNews(client)
+        if Reachability.isConnectedToNetwork() {
+            if let client = Dropbox.authorizedClient {
+                syncPhoto(client)
+                syncNews(client)
+            }else{
+                print("網路連線異常!!!")
+                self.title = "網路連線異常..."
+            }
         }else{
-            print("網路連線異常!!!")
-            self.title = "網路連線異常..."
+            showConnectionError()
         }
+        
+        
   
     }
 
@@ -102,10 +112,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     func dismissKeyboard(){
         self.inputTextField.resignFirstResponder()
+        self.inputTextView.resignFirstResponder()
+    }
+    
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == "ExportSegue"){
+            let resultVC = segue.destinationViewController as! ResultViewController
+            resultVC.exportImage = self.exportImage!
+        }
     }
     
     
-    //MARK: Keyboard
+    
+    //MARK: -Keyboard
     func keyboardWasShown(aNotification:NSNotification) {
         let info = aNotification.userInfo
         
@@ -121,8 +142,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         var aRect = self.view.frame
         aRect.size.height -= kbSize!.height
         
-        if (!CGRectContainsPoint(aRect, inputTextField.frame.origin)){
-            scrollView.scrollRectToVisible(inputTextField.frame, animated: true)
+        if (!CGRectContainsPoint(aRect, inputTextView.frame.origin)){
+            scrollView.scrollRectToVisible(inputTextView.frame, animated: true)
         }
         
         
@@ -134,54 +155,84 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         scrollView.contentInset = contentInsects
         scrollView.scrollIndicatorInsets = contentInsects
     }
+    
+    
+    //MARK: - IBAction
+    
 
-
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    
-    func textFieldTextDidChangeOneCI(notification:NSNotification){
-        let textField = notification.object! as! UITextField
-//        self.demoLabel.numberOfLines = 0;
-        self.demoLabel.lineBreakMode = NSLineBreakMode.ByCharWrapping
-        self.demoLabel.text = textField.text
-    }
-    
-    
     @IBAction func fontSizeChange(sender: UISlider) {
         self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
         
         if textAlignVertical {
             self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
             self.demoLabel.layoutIfNeeded()
+        }else{
+            
+            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: CGFloat(sender.value))
         }
-        
     }
     
-
+    
     @IBAction func convertPhoto(sender: AnyObject) {
         
-
+        self.title = "PTT柴犬回文圖產生器"
+        
         let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         let exportAction = UIAlertAction(title: "輸出圖檔", style: UIAlertActionStyle.Destructive) { _ in
             
-            if(self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0){
-                let alertView = UIAlertController(title: "我不知道你要說什麼", message:  "請於下方輸入格輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
-                let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
-                alertView.addAction(okAciton)
-                self.presentViewController(alertView, animated: true, completion: nil)
+            
+            if self.textAlignVertical {
+                if(self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0){
+                    let alertView = UIAlertController(title: "我不知道你要說什麼", message:  "請於下方輸入格輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
+                    let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
+                    alertView.addAction(okAciton)
+                    self.presentViewController(alertView, animated: true, completion: nil)
+                    
+                    self.demoLabel.text = "在下面輸入文字"
+                    self.inputTextField.text = self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                    return
+                }
                 
-                self.demoLabel.text = "在下面輸入文字"
-                self.inputTextField.text = self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            }else{
                 
-                return
-            }
+                if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0 || self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) == "你想說什麼" ){
+                    
+                        let alertView = UIAlertController(title: "我不知道你要說什麼", message:  "請點選圖片輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
+                        let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
+                        alertView.addAction(okAciton)
+                        self.presentViewController(alertView, animated: true, completion: nil)
+                    
+                        self.inputTextView.text = "點我輸入文字"
+                        self.inputTextView.textColor = UIColor.whiteColor()
 
+                        return
+                }
+                
+                
+                
+                
+            }
+            
+            
+            self.genImage()
+            self.performSegueWithIdentifier("ExportSegue", sender: self)
+            
         }
         
         let syncAction = UIAlertAction(title: "手動與伺服器同步圖檔", style: UIAlertActionStyle.Default) { _ in
+            
+            if (!Reachability.isConnectedToNetwork()) {
+                self.showConnectionError()
+                return
+            }
+            
+            
+            DropboxAuthManager.sharedAuthManager = DropboxAuthManager(appKey: DROPBOX_APPKEY)
+            Dropbox.authorizedClient = DropboxClient(accessToken: DropboxAccessToken(accessToken: DROPBOX_TOKEN, uid: "aircon.chen.apple@gmail.com"))
+            DropboxClient.sharedClient = Dropbox.authorizedClient
+            
+            
+            
             if let client = Dropbox.authorizedClient {
                 self.syncPhoto(client)
             }else{
@@ -193,15 +244,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         
         let newsAction = UIAlertAction(title: "最新消息", style: UIAlertActionStyle.Default) { _ in
             
-                
+            
             let filePath = self.localNewsFilePath.URLByAppendingPathComponent("news.txt").path!
             let isFileExist = NSFileManager.defaultManager().fileExistsAtPath(filePath)
             
             if isFileExist {
                 do {
                     let newsContent = try NSString(contentsOfFile: filePath, encoding: NSUTF8StringEncoding)
-                    
-                    
                     let newsAlertView = UIAlertView(title: "最新消息", message: "\(newsContent)", delegate: nil, cancelButtonTitle: "我知道了")
                     
                     newsAlertView.show()
@@ -214,7 +263,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                 //檔案不存在
                 print("news file is not exist....")
             }
-  
+            
         }
         
         let cancelAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: nil)
@@ -223,7 +272,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         actionController.addAction(syncAction)
         actionController.addAction(exportAction)
         actionController.addAction(cancelAction)
-   
+        
         presentViewController(actionController, animated: true, completion:nil)
     }
     
@@ -236,12 +285,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                 photoIndex = 0
             }
             
-
+            
             let readPath = self.localPhotoFilesPath.URLByAppendingPathComponent(localPhotoFiles[photoIndex])
             let image    = UIImage(contentsOfFile: readPath.path!)
             self.shibaImageView.image = image
             photoIndex += 1
-        
+            
         }else{
             print("just only have a photo....")
         }
@@ -250,34 +299,116 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     
-
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
-        if(segue.identifier == "ExportSegue"){
-            let resultVC = segue.destinationViewController as! ResultViewController
-            resultVC.exportImage = self.exportImage!
+    @IBAction func changeAlign(sender: AnyObject) {
+        
+        textAlignVertical = !textAlignVertical
+        
+        
+        if textAlignVertical {
+            
+            if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 && self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "你想說什麼"){
+                self.inputTextField.text = self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                self.demoLabel.text = self.inputTextField.text
+                
+                
+                
+            }
+            
+            alignButton.selected = !textAlignVertical
+            demoTextWidthLayoutConstraint.constant = CGFloat(self.fontsizeSlider.value)
+            self.demoLabel.layoutIfNeeded()
+            
+            demoLabel.hidden = false
+            inputTextView.hidden = true
+            inputTextField.hidden = false
+            horizontalIntroLabel.hidden = true
+        }else{
+            
+            if (self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 ){
+                self.inputTextView.text = self.inputTextField.text!
+                self.inputTextView.textColor = UIColor.whiteColor()
+            }else{
+                self.inputTextView.textColor = UIColor.lightGrayColor()
+                self.inputTextView.text = "你想說什麼"
+            }
+            
+            
+            let screenWidth = UIScreen.mainScreen().bounds.size.width
+            alignButton.selected = !textAlignVertical
+            demoTextWidthLayoutConstraint.constant = screenWidth - 40 - 39
+            
+            demoLabel.hidden = true
+            inputTextView.hidden = false
+            inputTextField.hidden = true
+            horizontalIntroLabel.hidden = false
         }
+        
     }
     
     
+    
+
+    //MARK: - TextField Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    func textFieldTextDidChangeOneCI(notification:NSNotification){
+        let textField = notification.object! as! UITextField
+        self.demoLabel.numberOfLines = 0;
+        self.demoLabel.lineBreakMode = NSLineBreakMode.ByCharWrapping
+        self.demoLabel.text = textField.text
+    }
+    
+    
+    
+    //MARK: - TextView Delegate
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        if (textView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) == "你想說什麼"){
+            textView.text = ""
+            textView.textColor = UIColor.whiteColor()
+        }
+        textView.backgroundColor = UIColor(red: 128, green: 128, blue: 128, alpha: 0.5)
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0  {
+            textView.text = "你想說什麼"
+            textView.textColor = UIColor.lightGrayColor()
+        }
+        
+        textView.backgroundColor = UIColor.clearColor()
+    }
+
+ 
+    
+
+ 
+    
     // MARK: 產生圖片
     func genImage() {
-        let image = self.shibaImageView
-        UIGraphicsBeginImageContextWithOptions(image.frame.size, true, 0.0)
-        image.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext()!, 40, 0)
-        self.demoLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        self.exportImage = UIGraphicsGetImageFromCurrentImageContext()
+//        let image = self.shibaImageView
+//        UIGraphicsBeginImageContextWithOptions(image.frame.size, true, 0.0)
+//        image.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+//        CGContextTranslateCTM(UIGraphicsGetCurrentContext()!, 40, 0)
+//        self.demoLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+//        self.exportImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsBeginImageContextWithOptions(componentView.frame.size, true, 0.0)
+        componentView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        self.exportImage = UIGraphicsGetImageFromCurrentImageContext()        
         UIGraphicsEndImageContext()
     }
     
     
+    
+    
+    // MARK: - Dropbox
     func syncNews(client:DropboxClient){
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            
             do{
                 
                 let filePath = self.localNewsFilePath.URLByAppendingPathComponent("news.txt").path!
@@ -322,18 +453,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             catch let error as NSError {
                 print("search local files error: \(error)...")
             }
-            
-            
-
-            
-            
+     
         }
     }
     
     
     func syncPhoto(client:DropboxClient){
-   
-        
         newPhotoCounter = 0
         updatePhotoCounter = 0
         
@@ -436,7 +561,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                             
                             do {
                                 print("delete file:\(theFileName)...")
-                                try NSFileManager.defaultManager().removeItemAtPath(self.directoryURL.URLByAppendingPathComponent(theFileName).path!)
+                                try NSFileManager.defaultManager().removeItemAtPath(self.localPhotoFilesPath.URLByAppendingPathComponent(theFileName).path!)
                             }
                             catch let error as NSError {
                                 print("delete local file wrong: \(error)...")
@@ -469,16 +594,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     }
     
-    //#MARK - FileName 處理
-    func getFileName(fullFileName:String) -> String {
-        return fullFileName.substringToIndex(fullFileName.rangeOfString(".", options: .BackwardsSearch)!.startIndex)
-    }
     
-    func getFileExt(fullFileName:String) -> String {
-        return fullFileName.substringFromIndex(fullFileName.rangeOfString(".", options: .BackwardsSearch)!.startIndex.successor())
-    }
-    
-
     
     func downloadPhotoFromDropbox(client:DropboxClient, entry:Files.Metadata){
         
@@ -494,7 +610,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                 print(error!)
             }
         }
-
+        
     }
     
     
@@ -504,7 +620,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             return self.localNewsFilePath.URLByAppendingPathComponent("news.txt")
         }
         client.files.download(path: "/news.txt", destination: destination).response { response, error in
-
+            
             if let (metadata, _) = response {
                 print("Downloaded news file name: \(metadata.name) success!!!")
             } else {
@@ -515,7 +631,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     }
     
     
-    // 掃描圖檔資料夾
+    //MARK - FileName 處理
+    func getFileName(fullFileName:String) -> String {
+        return fullFileName.substringToIndex(fullFileName.rangeOfString(".", options: .BackwardsSearch)!.startIndex)
+    }
+    
+    func getFileExt(fullFileName:String) -> String {
+        return fullFileName.substringFromIndex(fullFileName.rangeOfString(".", options: .BackwardsSearch)!.startIndex.successor())
+    }
+    
+
+    //MARK 掃描圖檔資料夾
     func scanLocalPhotoFiles(){
         do{
             localPhotoFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.localPhotoFilesPath.path!)
@@ -526,34 +652,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     
-    
-    
-    @IBOutlet weak var alignButton: UIButton!
-    
-    @IBAction func changeAlign(sender: AnyObject) {
-        
-        textAlignVertical = !textAlignVertical
-    
-        print("isAlignVertical:\(textAlignVertical)")
-        
-        
-        if textAlignVertical {
-            alignButton.selected = !textAlignVertical
-            demoTextWidthLayoutConstraint.constant = 39
-            self.demoLabel.layoutIfNeeded()
-        }else{
-            let screenWidth = UIScreen.mainScreen().bounds.size.width
-            alignButton.selected = !textAlignVertical
-            demoTextWidthLayoutConstraint.constant = screenWidth - 40 - 39
-        }
-        
-        
-        
-        
+  
+    func showConnectionError(){
+        let alertView = UIAlertView(title: "網路連線異常", message: "請確認網路連線狀況...", delegate: nil, cancelButtonTitle: "我知道了")
+        alertView.show()
     }
     
-    
-    
-    
 
+    
+    
+    
+   
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F0917CE1CB954E800360455 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0917CD1CB954E800360455 /* Reachability.swift */; };
 		8F2F200B1C958AFB0083C6FA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200A1C958AFB0083C6FA /* AdSupport.framework */; };
 		8F2F20131C958B2B0083C6FA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200C1C958B2B0083C6FA /* AudioToolbox.framework */; };
 		8F2F20141C958B2B0083C6FA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200D1C958B2B0083C6FA /* AVFoundation.framework */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		74679F82480B8EEF7496B26A /* Pods-ShibaGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.debug.xcconfig"; sourceTree = "<group>"; };
 		82CACE3E7FE00F0E29190C31 /* Pods-ShibaGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.release.xcconfig"; sourceTree = "<group>"; };
+		8F0917CD1CB954E800360455 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8F2F200A1C958AFB0083C6FA /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		8F2F200C1C958B2B0083C6FA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8F2F200D1C958B2B0083C6FA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -164,6 +166,7 @@
 				8F4C32351C95178800A3C58A /* Info.plist */,
 				8F2F20241C9594870083C6FA /* InfoPlist.strings */,
 				8FBD07841CA6702300CA6C33 /* ShibaGenerator-Bridging-Header.h */,
+				8F0917CD1CB954E800360455 /* Reachability.swift */,
 			);
 			path = ShibaGenerator;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 			files = (
 				8F4C322C1C95178700A3C58A /* ViewController.swift in Sources */,
 				8F4C322A1C95178700A3C58A /* AppDelegate.swift in Sources */,
+				8F0917CE1CB954E800360455 /* Reachability.swift in Sources */,
 				8F4C323C1C9573D600A3C58A /* ResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

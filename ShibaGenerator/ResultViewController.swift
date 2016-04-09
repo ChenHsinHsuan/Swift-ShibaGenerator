@@ -69,7 +69,6 @@ class ResultViewController: UIViewController{
             
         }
         let shareToLineAction = UIAlertAction(title: "不儲存分享到LINE", style: UIAlertActionStyle.Default) { _ in
-            self.showAdmob()
             Line.shareImage(self.exportImage)
         }
         
@@ -85,9 +84,6 @@ class ResultViewController: UIViewController{
         
         let exportPictureAction = UIAlertAction(title: "儲存到相片膠卷", style: UIAlertActionStyle.Default) { _ in
         
-            
-            UIImageWriteToSavedPhotosAlbum(self.exportImage!, nil, nil, nil)
-            
             let status = PHPhotoLibrary.authorizationStatus()
             
             let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
