@@ -9,11 +9,11 @@
 import UIKit
 import Photos
 import GoogleMobileAds
-import LineKit
-import Social
 import ImgurAnonymousAPIClient
-import MBProgressHUD
+import Social
+import SVProgressHUD
 import SystemConfiguration
+
 
 class ResultViewController: UIViewController{
 
@@ -68,12 +68,33 @@ class ResultViewController: UIViewController{
             }
             
         }
-        let shareToLineAction = UIAlertAction(title: "不儲存分享到LINE", style: UIAlertActionStyle.Default) { _ in
-            Line.shareImage(self.exportImage)
+        
+//        let shareToOtherAction = UIAlertAction(title: "不儲存分享到其他APP", style: UIAlertActionStyle.Default) { _ in
+//  
+//            
+//        }
+        
+        
+        let shareToLineAction = UIAlertAction(title: "分享到LINE", style: UIAlertActionStyle.Default) { _ in
+
+            
+            var pasteBoard = UIPasteboard(name: "jp.naver.linecamera.pasteboard", create: true)!
+            if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
+                pasteBoard = UIPasteboard.generalPasteboard()
+            }
+            
+            pasteBoard.setData(UIImageJPEGRepresentation(self.exportImage, 1.0)!, forPasteboardType: "public.jpeg")
+            
+            let lineAppURL:NSURL = NSURL(string: "line://msg/image/\(pasteBoard.name)")!
+            
+            if( UIApplication.sharedApplication().canOpenURL(lineAppURL)){
+                UIApplication.sharedApplication().openURL(lineAppURL)
+            }
+            
         }
         
         
-        let shareToFBAction = UIAlertAction(title: "不儲存分享到Facebook", style: UIAlertActionStyle.Default) { _ in
+        let shareToFBAction = UIAlertAction(title: "分享到Facebook", style: UIAlertActionStyle.Default) { _ in
             
             let fbSheet = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
             fbSheet.addImage(self.exportImage!)
@@ -103,9 +124,11 @@ class ResultViewController: UIViewController{
         }
         
         
-        let imgurAction = UIAlertAction(title: "不儲存上傳到imgur拿URL", style: UIAlertActionStyle.Default) { _ in
+        let imgurAction = UIAlertAction(title: "上傳imgur拿短網址", style: UIAlertActionStyle.Default) { _ in
             
-            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+
+            SVProgressHUD.showWithStatus("上傳中,請稍候...")
+            SVProgressHUD.setDefaultMaskType(SVProgressHUDMaskType.Black)
             
             self.imgurClient = ImgurAnonymousAPIClient(clientID: "1720b099a01eafe")
 
@@ -127,7 +150,8 @@ class ResultViewController: UIViewController{
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), {
-                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+
+                        SVProgressHUD.dismiss()
                     })
                 })
             })
@@ -140,6 +164,7 @@ class ResultViewController: UIViewController{
         }
         
         alertController.addAction(sponseAction)
+//        alertController.addAction(shareToOtherAction)
         alertController.addAction(shareToLineAction)
         alertController.addAction(shareToFBAction);
         alertController.addAction(imgurAction)
@@ -167,7 +192,6 @@ class ResultViewController: UIViewController{
     func showAdmob(){
         self.appDelegate.myInterstitial!.presentFromRootViewController(self)
     }
-    
     
 
 

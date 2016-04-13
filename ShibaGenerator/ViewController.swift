@@ -9,9 +9,9 @@
 import UIKit
 import Photos
 import SwiftyDropbox
-import MBProgressHUD
 
-class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, DBRestClientDelegate, UITextViewDelegate, UIPopoverPresentationControllerDelegate {
+
+class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, UITextViewDelegate, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var demoLabel: UILabel!
     
@@ -175,7 +175,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     @IBAction func convertPhoto(sender: AnyObject) {
         
-        self.title = "PTT柴犬回文圖產生器"
+        self.title = "PTT回文圖產生器"
+        inputTextView.backgroundColor = UIColor.clearColor()
         
         let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         let exportAction = UIAlertAction(title: "輸出圖檔", style: UIAlertActionStyle.Destructive) { _ in
@@ -282,7 +283,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         if localPhotoFiles.count > 0 {
             
             if photoIndex == localPhotoFiles.count {
+                self.title = "回到第一張囉"
                 photoIndex = 0
+            }else{
+                self.title = "PTT回文圖產生器"
             }
             
             
@@ -292,7 +296,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             photoIndex += 1
             
         }else{
-            print("just only have a photo....")
+            if (!Reachability.isConnectedToNetwork()) {
+                self.shibaImageView.image = UIImage(named: "Shiba")
+                let alertView = UIAlertView(title: "請打開網路", message: "同步圖檔才有新的圖片可以用...", delegate: nil, cancelButtonTitle: "我知道了")
+                alertView.show()
+            }else{
+                if let client = Dropbox.authorizedClient {
+                    syncPhoto(client)
+                    syncNews(client)
+                }
+            }
+        
         }
         
     }
@@ -309,9 +323,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 && self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "你想說什麼"){
                 self.inputTextField.text = self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                 self.demoLabel.text = self.inputTextField.text
-                
-                
-                
             }
             
             alignButton.selected = !textAlignVertical
@@ -473,7 +484,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                     }
 
                 }else{
-                    
+
                     //檔案不存在
                     self.downloadNewsFromDropbox(client)
                 }
@@ -493,7 +504,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             // do some task
-        
+            dispatch_async(dispatch_get_main_queue()) {
+                self.title = "同步圖檔中..."
+            }
             //從遠端檢查本機
             client.files.listFolder(path: "/pics").response { response, error in
                 if let result = response {
@@ -556,23 +569,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                 } else {
                     print("listFolder error:\(error!)")
                 }
-                
-                
-                
-                
+
                 self.checkLocalPhoto(client)
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.title = "結束同步圖檔..."
+                }
             }
 
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                self.title = "背景同步圖檔中..."
-            }
         }
     }
     
     
     func checkLocalPhoto(client:DropboxClient){
          dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                self.title = "檢查本機圖檔中..."
+            }
+            
             //從本機檢查遠端
             do{
                 let files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath((self.localPhotoFilesPath as NSURL).path!)
@@ -609,14 +624,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             }
             
             
-            if self.newPhotoCounter > 0 && self.updatePhotoCounter  > 0 {
-                self.title = "新增:\(self.newPhotoCounter),更新:\(self.updatePhotoCounter)"
-            }else if self.newPhotoCounter > 0 {
-                self.title = "新增\(self.newPhotoCounter)張圖"
-            }else if self.updatePhotoCounter  > 0 {
-                self.title = "更新\(self.updatePhotoCounter)張圖"
-            }else{
-                self.title = "圖檔掃描完畢..."
+            
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                if self.newPhotoCounter > 0 && self.updatePhotoCounter  > 0 {
+                    self.title = "新增:\(self.newPhotoCounter),更新:\(self.updatePhotoCounter)"
+                }else if self.newPhotoCounter > 0 {
+                    self.title = "新增\(self.newPhotoCounter)張圖"
+                }else if self.updatePhotoCounter  > 0 {
+                    self.title = "更新\(self.updatePhotoCounter)張圖"
+                }else{
+                    self.title = "圖檔掃描完畢..."
+                }
             }
 
         }

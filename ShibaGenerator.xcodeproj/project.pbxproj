@@ -28,6 +28,10 @@
 		8F4C32311C95178800A3C58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F4C32301C95178800A3C58A /* Assets.xcassets */; };
 		8F4C32341C95178800A3C58A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F4C32321C95178800A3C58A /* LaunchScreen.storyboard */; };
 		8F4C323C1C9573D600A3C58A /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4C323B1C9573D600A3C58A /* ResultViewController.swift */; };
+		8FA87AB11CBA61FB003E5DF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA87AB01CBA61FB003E5DF0 /* Foundation.framework */; };
+		8FA87ABA1CBA92A2003E5DF0 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA87AB91CBA92A2003E5DF0 /* MobileCoreServices.framework */; };
+		8FA87ABC1CBA92B3003E5DF0 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA87ABB1CBA92B3003E5DF0 /* AssetsLibrary.framework */; };
+		8FA87ABE1CBA92BE003E5DF0 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA87ABD1CBA92BE003E5DF0 /* ImageIO.framework */; };
 		8FB9A32C1CB55C9000001A42 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB9A32B1CB55C9000001A42 /* DropboxSDK.framework */; };
 		8FB9A32E1CB55CA800001A42 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB9A32D1CB55CA800001A42 /* Security.framework */; };
 		8FB9A3301CB55CAF00001A42 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB9A32F1CB55CAF00001A42 /* QuartzCore.framework */; };
@@ -76,10 +80,23 @@
 		8F4C32331C95178800A3C58A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F4C32351C95178800A3C58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F4C323B1C9573D600A3C58A /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		8FA87A9C1CBA5556003E5DF0 /* ShibaGenerator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShibaGenerator-Bridging-Header.h"; sourceTree = "<group>"; };
+		8FA87AB01CBA61FB003E5DF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8FA87AB21CBA8DF8003E5DF0 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		8FA87AB51CBA8E1E003E5DF0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		8FA87AB91CBA92A2003E5DF0 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		8FA87ABB1CBA92B3003E5DF0 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		8FA87ABD1CBA92BE003E5DF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		8FA87ABF1CBA94D1003E5DF0 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		8FAE3EB41CBA4564006F5E13 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ShibaGenerator-fixkmqkuzsbcqeebcunijoxhaoff/Build/Products/Debug-iphoneos/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
+		8FAE3EB51CBA4564006F5E13 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ShibaGenerator-fixkmqkuzsbcqeebcunijoxhaoff/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
+		8FAE3EB61CBA4564006F5E13 /* ImgurAnonymousAPIClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImgurAnonymousAPIClient.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ShibaGenerator-fixkmqkuzsbcqeebcunijoxhaoff/Build/Products/Debug-iphoneos/ImgurAnonymousAPIClient/ImgurAnonymousAPIClient.framework"; sourceTree = "<group>"; };
+		8FAE3EB71CBA4564006F5E13 /* LineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LineKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ShibaGenerator-fixkmqkuzsbcqeebcunijoxhaoff/Build/Products/Debug-iphoneos/LineKit/LineKit.framework"; sourceTree = "<group>"; };
+		8FAE3EB81CBA4564006F5E13 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ShibaGenerator-fixkmqkuzsbcqeebcunijoxhaoff/Build/Products/Debug-iphoneos/MBProgressHUD/MBProgressHUD.framework"; sourceTree = "<group>"; };
+		8FAE3EB91CBA4564006F5E13 /* SwiftyDropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyDropbox.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ShibaGenerator-fixkmqkuzsbcqeebcunijoxhaoff/Build/Products/Debug-iphoneos/SwiftyDropbox/SwiftyDropbox.framework"; sourceTree = "<group>"; };
 		8FB9A32B1CB55C9000001A42 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
 		8FB9A32D1CB55CA800001A42 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8FB9A32F1CB55CAF00001A42 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		8FBD07841CA6702300CA6C33 /* ShibaGenerator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShibaGenerator-Bridging-Header.h"; sourceTree = "<group>"; };
 		F0B0BD557F36120ACB383C44 /* Pods_ShibaGenerator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShibaGenerator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -88,6 +105,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FA87ABE1CBA92BE003E5DF0 /* ImageIO.framework in Frameworks */,
+				8FA87ABC1CBA92B3003E5DF0 /* AssetsLibrary.framework in Frameworks */,
+				8FA87ABA1CBA92A2003E5DF0 /* MobileCoreServices.framework in Frameworks */,
+				8FA87AB11CBA61FB003E5DF0 /* Foundation.framework in Frameworks */,
 				8FB9A3301CB55CAF00001A42 /* QuartzCore.framework in Frameworks */,
 				8FB9A32E1CB55CA800001A42 /* Security.framework in Frameworks */,
 				8F2F201F1C958B3C0083C6FA /* SystemConfiguration.framework in Frameworks */,
@@ -100,9 +121,9 @@
 				8F2F20161C958B2B0083C6FA /* CoreMedia.framework in Frameworks */,
 				8F2F20171C958B2B0083C6FA /* CoreTelephony.framework in Frameworks */,
 				8F2F20181C958B2B0083C6FA /* EventKit.framework in Frameworks */,
+				DD29D0DCE0715E836BA7B5EB /* Pods_ShibaGenerator.framework in Frameworks */,
 				8F2F20191C958B2B0083C6FA /* EventKitUI.framework in Frameworks */,
 				8F2F200B1C958AFB0083C6FA /* AdSupport.framework in Frameworks */,
-				DD29D0DCE0715E836BA7B5EB /* Pods_ShibaGenerator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +142,19 @@
 		7261886218078062329DBC0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8FA87ABF1CBA94D1003E5DF0 /* libstdc++.tbd */,
+				8FA87ABD1CBA92BE003E5DF0 /* ImageIO.framework */,
+				8FA87ABB1CBA92B3003E5DF0 /* AssetsLibrary.framework */,
+				8FA87AB91CBA92A2003E5DF0 /* MobileCoreServices.framework */,
+				8FA87AB51CBA8E1E003E5DF0 /* libz.tbd */,
+				8FA87AB21CBA8DF8003E5DF0 /* libxml2.tbd */,
+				8FA87AB01CBA61FB003E5DF0 /* Foundation.framework */,
+				8FAE3EB41CBA4564006F5E13 /* AFNetworking.framework */,
+				8FAE3EB51CBA4564006F5E13 /* Alamofire.framework */,
+				8FAE3EB61CBA4564006F5E13 /* ImgurAnonymousAPIClient.framework */,
+				8FAE3EB71CBA4564006F5E13 /* LineKit.framework */,
+				8FAE3EB81CBA4564006F5E13 /* MBProgressHUD.framework */,
+				8FAE3EB91CBA4564006F5E13 /* SwiftyDropbox.framework */,
 				8FB9A32F1CB55CAF00001A42 /* QuartzCore.framework */,
 				8FB9A32D1CB55CA800001A42 /* Security.framework */,
 				8FB9A32B1CB55C9000001A42 /* DropboxSDK.framework */,
@@ -171,8 +205,8 @@
 				8F4C32321C95178800A3C58A /* LaunchScreen.storyboard */,
 				8F4C32351C95178800A3C58A /* Info.plist */,
 				8F2F20241C9594870083C6FA /* InfoPlist.strings */,
-				8FBD07841CA6702300CA6C33 /* ShibaGenerator-Bridging-Header.h */,
 				8F0917CD1CB954E800360455 /* Reachability.swift */,
+				8FA87A9C1CBA5556003E5DF0 /* ShibaGenerator-Bridging-Header.h */,
 			);
 			path = ShibaGenerator;
 			sourceTree = "<group>";
@@ -450,6 +484,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -465,6 +500,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -482,12 +518,17 @@
 				INFOPLIST_FILE = ShibaGenerator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aircon.ShibaGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ShibaGenerator/ShibaGenerator-Bridging-Header.h";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ShibaGenerator/ShibaGenerator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -501,6 +542,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -518,11 +560,16 @@
 				INFOPLIST_FILE = ShibaGenerator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aircon.ShibaGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ShibaGenerator/ShibaGenerator-Bridging-Header.h";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ShibaGenerator/ShibaGenerator-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
 		};

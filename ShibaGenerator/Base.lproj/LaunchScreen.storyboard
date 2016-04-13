@@ -13,20 +13,22 @@
                         <viewControllerLayoutGuide type="top" id="Llm-lL-Icb"/>
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                    <view key="view" contentMode="scaleToFill" id="i32-tP-Vfg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="snapshot" translatesAutoresizingMaskIntoConstraints="NO" id="hfu-uU-w22">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group" translatesAutoresizingMaskIntoConstraints="NO" id="k3V-jy-hk2">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="hfu-uU-w22" secondAttribute="trailing" id="1dO-Yr-6Ur"/>
-                            <constraint firstItem="hfu-uU-w22" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="H2j-eW-N7D"/>
-                            <constraint firstItem="hfu-uU-w22" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="mgn-WV-2s0"/>
-                            <constraint firstItem="hfu-uU-w22" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="yek-od-1rO"/>
+                            <constraint firstItem="k3V-jy-hk2" firstAttribute="top" secondItem="i32-tP-Vfg" secondAttribute="top" id="Jbf-hm-Ssi"/>
+                            <constraint firstAttribute="trailing" secondItem="k3V-jy-hk2" secondAttribute="trailing" id="LSw-rI-nxw"/>
+                            <constraint firstItem="k3V-jy-hk2" firstAttribute="centerY" secondItem="i32-tP-Vfg" secondAttribute="centerY" id="Xda-rf-eCC"/>
+                            <constraint firstItem="k3V-jy-hk2" firstAttribute="centerX" secondItem="i32-tP-Vfg" secondAttribute="centerX" id="fRV-JL-BoN"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="k3V-jy-hk2" secondAttribute="bottom" id="jt9-nv-qEf"/>
+                            <constraint firstItem="k3V-jy-hk2" firstAttribute="leading" secondItem="i32-tP-Vfg" secondAttribute="leading" id="ndC-XM-dIb"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -37,6 +39,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="snapshot" width="640" height="1136"/>
+        <image name="Group" width="640" height="1136"/>
     </resources>
 </document>
