@@ -9,5 +9,4 @@ pod 'Crashlytics'
 pod 'ImgurAnonymousAPIClient', :git => 'https://github.com/nolanw/ImgurAnonymousAPIClient.git', :tag => 'v0.1.1'
 pod 'SVProgressHUD'
 pod 'SwiftyDropbox', '~> 3.0.0'
-pod 'AFNetworking'
 end
