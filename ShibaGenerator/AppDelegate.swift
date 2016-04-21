@@ -17,6 +17,12 @@ let DROPBOX_APPKEY = "b9z3jzpe7ykso0k"
 let DROPBOX_APPSECRET = "1oezloahrcrnz92"
 let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAAAZe46k0bp_YRog9wwHCbyqJAYKonZy7hxeYU461wmXmLD"
 
+
+//let DROPBOX_APPKEY = "dxzz5hggavsa7qp"
+//let DROPBOX_APPSECRET = "pist4gysdf7nrl6"
+//let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAAA6D431R694nTLGQD0oMBXNb_K8yA1k-akMOgHdoRqPS2f"
+let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
 

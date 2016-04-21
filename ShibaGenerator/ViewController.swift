@@ -19,7 +19,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var fontsizeSlider: UISlider!
     
     @IBOutlet weak var shibaImageView: UIImageView!
 
@@ -29,9 +28,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     @IBOutlet weak var componentView: UIView!
     
-    @IBOutlet weak var alignButton: UIButton!
-    
-    @IBOutlet weak var horizontalIntroLabel: UILabel!
+
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var exportImage:UIImage?
     var localPhotoFiles:[String] = []
@@ -126,7 +123,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     
-    //MARK: -Keyboard
+    //MARK: - Keyboard
     func keyboardWasShown(aNotification:NSNotification) {
         let info = aNotification.userInfo
         
@@ -137,16 +134,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         scrollView.contentInset = contentInsets
         
         scrollView.scrollIndicatorInsets = contentInsets
-        
-        
+    
         var aRect = self.view.frame
         aRect.size.height -= kbSize!.height
         
         if (!CGRectContainsPoint(aRect, inputTextView.frame.origin)){
             scrollView.scrollRectToVisible(inputTextView.frame, animated: true)
         }
-        
-        
         
     }
     
@@ -159,18 +153,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     //MARK: - IBAction
     
-
-    @IBAction func fontSizeChange(sender: UISlider) {
-        self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
-        
+    func setFontSize(fontSize:CGFloat){
+        self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: fontSize)
         if textAlignVertical {
-            self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
+            self.demoTextWidthLayoutConstraint.constant = fontSize
             self.demoLabel.layoutIfNeeded()
         }else{
-            
-            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: CGFloat(sender.value))
+            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: fontSize)
         }
     }
+    
+    
+//    @IBAction func fontSizeChange(sender: UISlider) {
+//        self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
+//        
+//        if textAlignVertical {
+//            self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
+//            self.demoLabel.layoutIfNeeded()
+//        }else{
+//            
+//            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: CGFloat(sender.value))
+//        }
+//    }
     
     
     @IBAction func convertPhoto(sender: AnyObject) {
@@ -313,28 +317,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     
-    @IBAction func changeAlign(sender: AnyObject) {
+    @IBAction func changeAlign(sender: UIButton) {
         
         textAlignVertical = !textAlignVertical
         
         
         if textAlignVertical {
-            
+            sender.setTitle("直式", forState: UIControlState.Normal)
             if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 && self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "你想說什麼"){
                 self.inputTextField.text = self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                 self.demoLabel.text = self.inputTextField.text
             }
             
-            alignButton.selected = !textAlignVertical
-            demoTextWidthLayoutConstraint.constant = CGFloat(self.fontsizeSlider.value)
+//            alignButton.selected = !textAlignVertical
+            demoTextWidthLayoutConstraint.constant = CGFloat(self.demoLabel.font.pointSize)
             self.demoLabel.layoutIfNeeded()
             
             demoLabel.hidden = false
             inputTextView.hidden = true
             inputTextField.hidden = false
-            horizontalIntroLabel.hidden = true
+//            horizontalIntroLabel.hidden = true
         }else{
-            
+            sender.setTitle("橫式", forState: UIControlState.Normal)
             if (self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 ){
                 self.inputTextView.text = self.inputTextField.text!
                 self.inputTextView.textColor = UIColor.whiteColor()
@@ -345,17 +349,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
             
             
             let screenWidth = UIScreen.mainScreen().bounds.size.width
-            alignButton.selected = !textAlignVertical
+//            alignButton.selected = !textAlignVertical
             demoTextWidthLayoutConstraint.constant = screenWidth - 40 - 39
             
             demoLabel.hidden = true
             inputTextView.hidden = false
             inputTextField.hidden = true
-            horizontalIntroLabel.hidden = false
+//            horizontalIntroLabel.hidden = false
         }
         
     }
     
+    @IBAction func fontSizePikerPressed(sender: UIButton) {
+        let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("fontSizePickerPopover") as! FontSizePickerViewController
+        popoverVC.modalPresentationStyle = .Popover
+        popoverVC.preferredContentSize = CGSizeMake(284, 100)
+        if let popoverController = popoverVC.popoverPresentationController {
+            popoverController.sourceView = sender
+            popoverController.sourceRect = CGRect(x: 0, y: 0, width: 85, height: 30)
+            popoverController.permittedArrowDirections = .Any
+            popoverController.delegate = self
+            popoverVC.delegate = self
+        }
+        presentViewController(popoverVC, animated: true, completion: nil)
+    }
     
     @IBAction func colorPickerButtonPressed(sender: UIButton) {
         let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("colorPickerPopover") as! ColorPickerViewController
