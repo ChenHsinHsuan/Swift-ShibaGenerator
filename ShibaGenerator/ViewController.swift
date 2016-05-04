@@ -9,33 +9,47 @@
 import UIKit
 import Photos
 import SwiftyDropbox
-
+import ImgurAnonymousAPIClient
+import Social
+import SVProgressHUD
+import SystemConfiguration
 
 class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, UITextViewDelegate, UIPopoverPresentationControllerDelegate {
 
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var componentView: UIView!
+    @IBOutlet weak var shibaImageView: UIImageView!
     @IBOutlet weak var demoLabel: UILabel!
+    @IBOutlet weak var inputTextView: UITextView!
+    @IBOutlet weak var demoTextWidthLayoutConstraint: NSLayoutConstraint!
+    
     
     @IBOutlet weak var inputTextField: UITextField!
     
-    @IBOutlet weak var scrollView: UIScrollView!
     
     
-    @IBOutlet weak var shibaImageView: UIImageView!
-
-    @IBOutlet weak var demoTextWidthLayoutConstraint: NSLayoutConstraint!
-
-    @IBOutlet weak var inputTextView: UITextView!
-    
-    @IBOutlet weak var componentView: UIView!
-    
-
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var exportImage:UIImage?
-    var localPhotoFiles:[String] = []
     let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
     let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-    var localPhotoFilesPath:NSURL!
-    var localNewsFilePath:NSURL!
+    
+    
+
+    enum ToolMode {
+        case KEYIN          //keyin mode
+        case DRAWING        //drawing mode
+    }
+
+    var toolMode = ToolMode.KEYIN
+    var imgurClient:ImgurAnonymousAPIClient? = nil
+    
+    
+    @IBOutlet weak var inputToolbar: UIToolbar!
+    @IBOutlet weak var drawingToolbar: UIToolbar!
+    @IBOutlet weak var changePhotoButton: UIButton!
+    
+
+    
     
     var textAlignVertical = true
     var photoIndex = 1
@@ -44,69 +58,58 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     var tempInputString = ""
 
+    //for Drawing
+//    @IBOutlet weak var drawImageView: UIImageView!
+//    @IBOutlet weak var tempImageView: UIImageView!
+//    var lastPoint = CGPoint.zero
+//    var red: CGFloat = 255.0
+//    var green: CGFloat = 0.0
+//    var blue: CGFloat = 0.0
+//    var brushWidth: CGFloat = 10.0
+//    var opacity: CGFloat = 1.0
+//    var swiped = false
+//    var drawMode = false
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
       
         
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.appDelegate.delegate = self
+        
+        //Observer
         NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(ViewController.keyboardWasShown(_:)), name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(ViewController.keyboardWillBeHidden), name: UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.textFieldTextDidChangeOneCI(_:)), name: UITextFieldTextDidChangeNotification, object: inputTextField)
         
         
-        //MARK: guesture
-        
+        //guesture
         let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
-        
         self.view.addGestureRecognizer(tap)
+        
         
         
         // ask photo permission
         PHPhotoLibrary.requestAuthorization({(status:PHAuthorizationStatus) in
-
         })
-        
-        
-        
-        prepareVariabal()
-        scanLocalPhotoFiles()
         
         
         if Reachability.isConnectedToNetwork() {
             if let client = Dropbox.authorizedClient {
-                syncPhoto(client)
-                syncNews(client)
+                appDelegate.syncPhoto(client)
+                appDelegate.syncNews(client)
             }else{
-                print("網路連線異常!!!")
-                self.title = "網路連線異常..."
+                UIAlertView(title: "網路連線異常", message: "請確認網路連線狀況...", delegate: nil, cancelButtonTitle: "我知道了").show()
             }
         }else{
-            showConnectionError()
+            UIAlertView(title: "網路連線異常", message: "請確認網路連線狀況...", delegate: nil, cancelButtonTitle: "我知道了").show()
         }
         
-        
-  
     }
 
-    
-    func prepareVariabal(){
-        self.localPhotoFilesPath = self.directoryURL.URLByAppendingPathComponent("files")
-        self.localNewsFilePath = self.directoryURL.URLByAppendingPathComponent("news")
-        do {
-            try NSFileManager.defaultManager().createDirectoryAtPath(self.localPhotoFilesPath.path!, withIntermediateDirectories: true, attributes: nil)
-            try NSFileManager.defaultManager().createDirectoryAtPath(self.localNewsFilePath.path!, withIntermediateDirectories: true, attributes: nil)
-        } catch let error as NSError {
-            NSLog("Unable to create directory \(error.debugDescription)")
-        }
-    }
 
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
     func dismissKeyboard(){
         self.inputTextField.resignFirstResponder()
         self.inputTextView.resignFirstResponder()
@@ -151,194 +154,248 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     }
     
     
-    //MARK: - IBAction
+    //MARK: - My Delegate
+    func setShibaImage(replaceImage:UIImage){
+        shibaImageView.image = replaceImage
+    }
     
-    func setFontSize(fontSize:CGFloat){
-        self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: fontSize)
-        if textAlignVertical {
-            self.demoTextWidthLayoutConstraint.constant = fontSize
-            self.demoLabel.layoutIfNeeded()
+    
+    func setButtonColor (color: UIColor) {
+        if textAlignVertical{
+            demoLabel.textColor = color
         }else{
-            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: fontSize)
+            inputTextView.textColor = color
         }
     }
     
     
-//    @IBAction func fontSizeChange(sender: UISlider) {
-//        self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
-//        
-//        if textAlignVertical {
-//            self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
-//            self.demoLabel.layoutIfNeeded()
-//        }else{
-//            
-//            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: CGFloat(sender.value))
-//        }
-//    }
     
-    
-    @IBAction func convertPhoto(sender: AnyObject) {
+    func showExportOption(){
         
-        self.title = "PTT回文圖產生器"
-        inputTextView.backgroundColor = UIColor.clearColor()
+        genImage()
         
-        let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let exportAction = UIAlertAction(title: "輸出圖檔", style: UIAlertActionStyle.Destructive) { _ in
-            
-            
-            if self.textAlignVertical {
-                if(self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0){
-                    let alertView = UIAlertController(title: "我不知道你要說什麼", message:  "請於下方輸入格輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
-                    alertView.addAction(okAciton)
-                    self.presentViewController(alertView, animated: true, completion: nil)
-                    
-                    self.demoLabel.text = "在下面輸入文字"
-                    self.inputTextField.text = self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-                    return
-                }
-                
+        
+        let alertController = UIAlertController(title: "請選擇您想匯出的方式", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        
+        let sponseAction = UIAlertAction(title: "再看一次廣告贊助作者", style: UIAlertActionStyle.Destructive) { _ in
+            if (self.appDelegate.myInterstitial!.isReady){
+                self.appDelegate.myInterstitial!.presentFromRootViewController(self)
             }else{
+                let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
+                let alertView = UIAlertController(title: "APP偵測到你的網路異常", message: "謝謝你這麼有心～等網路正常再幫我點吧～謝謝", preferredStyle: UIAlertControllerStyle.Alert)
+                alertView.addAction(okAciton)
+                self.presentViewController(alertView, animated: true, completion: nil)
+            }
+            
+        }
+
+        
+        
+        let shareToLineAction = UIAlertAction(title: "分享到LINE", style: UIAlertActionStyle.Default) { _ in
+            
+            
+            var pasteBoard = UIPasteboard(name: "jp.naver.linecamera.pasteboard", create: true)!
+            if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
+                pasteBoard = UIPasteboard.generalPasteboard()
+            }
+            
+            pasteBoard.setData(UIImageJPEGRepresentation(self.exportImage!, 1.0)!, forPasteboardType: "public.jpeg")
+            
+            let lineAppURL:NSURL = NSURL(string: "line://msg/image/\(pasteBoard.name)")!
+            
+            if( UIApplication.sharedApplication().canOpenURL(lineAppURL)){
+                UIApplication.sharedApplication().openURL(lineAppURL)
+            }
+            
+        }
+        
+        
+        let shareToFBAction = UIAlertAction(title: "分享到Facebook", style: UIAlertActionStyle.Default) { _ in
+            
+            let fbSheet = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+            fbSheet.addImage(self.exportImage!)
+            self.presentViewController(fbSheet, animated: true, completion: nil)
+        }
+        
+        
+        
+        let exportPictureAction = UIAlertAction(title: "儲存到相片膠卷", style: UIAlertActionStyle.Default) { _ in
+            
+            let status = PHPhotoLibrary.authorizationStatus()
+            
+            let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
+            
+            if status == PHAuthorizationStatus.Authorized{
+                //Save it to the camera roll
+                UIImageWriteToSavedPhotosAlbum(self.exportImage!, nil, nil, nil)
                 
-                if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count == 0 || self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) == "你想說什麼" ){
+                let alertView = UIAlertController(title: "匯出成功", message:  "圖已經存至您的相機膠卷中囉!", preferredStyle: UIAlertControllerStyle.Alert)
+                alertView.addAction(okAciton)
+                self.presentViewController(alertView, animated: true, completion: nil)
+            }else{
+                let alertView = UIAlertController(title: "匯出失敗", message:  "請至設定>隱私權>照片>將柴犬產生器的權限打開唷!!", preferredStyle: UIAlertControllerStyle.Alert)
+                alertView.addAction(okAciton)
+                self.presentViewController(alertView, animated: true, completion: nil)
+            }
+        }
+        
+        
+        let imgurAction = UIAlertAction(title: "上傳imgur拿短網址", style: UIAlertActionStyle.Default) { _ in
+            
+            
+            SVProgressHUD.showWithStatus("上傳中,請稍候...")
+            SVProgressHUD.setDefaultMaskType(SVProgressHUDMaskType.Black)
+            
+            self.imgurClient = ImgurAnonymousAPIClient(clientID: "1720b099a01eafe")
+            
+            dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0),{
+                self.imgurClient?.uploadImage(self.exportImage, withFilename: "\(self.appDelegate.printTimestamp()).jpg", completionHandler: { (url, erorr) in
                     
-                        let alertView = UIAlertController(title: "我不知道你要說什麼", message:  "請點選圖片輸入文字!!", preferredStyle: UIAlertControllerStyle.Alert)
+                    if(url == nil){
                         let okAciton = UIAlertAction(title: "我知道了", style: UIAlertActionStyle.Default, handler: nil)
+                        let alertView = UIAlertController(title: "APP偵測到你的網路異常，所以沒辦法幫你上傳", message: "請確認連線狀況!", preferredStyle: UIAlertControllerStyle.Alert)
                         alertView.addAction(okAciton)
                         self.presentViewController(alertView, animated: true, completion: nil)
+                    }else{
+                        let alertView = UIAlertController(title: "上傳完畢，網址如下", message: "\(url)", preferredStyle: UIAlertControllerStyle.ActionSheet)
+                        let copyAction = UIAlertAction(title: "幫我複製URL讓我直接可以貼上", style: UIAlertActionStyle.Default, handler: { _ in
+                            UIPasteboard.generalPasteboard().string = "\(url)"
+                        })
+                        alertView.addAction(copyAction)
+                        self.presentViewController(alertView, animated: true, completion: nil)
+                    }
                     
-                        self.inputTextView.text = "點我輸入文字"
-                        self.inputTextView.textColor = UIColor.whiteColor()
+                    dispatch_async(dispatch_get_main_queue(), {
+                        
+                        SVProgressHUD.dismiss()
+                    })
+                })
+            })
+            
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel) { _ in
+            self.exportImage = nil
+        }
+        
+        alertController.addAction(sponseAction)
+        alertController.addAction(shareToLineAction)
+        alertController.addAction(shareToFBAction);
+        alertController.addAction(imgurAction)
+        alertController.addAction(exportPictureAction)
+        alertController.addAction(cancelAction)
+        
+        presentViewController(alertController, animated: true, completion:nil)
 
-                        return
-                }
-                
-                
-                
-                
-            }
-            
-            
-            self.genImage()
-            self.performSegueWithIdentifier("ExportSegue", sender: self)
-            
-        }
-        
-        let syncAction = UIAlertAction(title: "手動與伺服器同步圖檔", style: UIAlertActionStyle.Default) { _ in
-            
-            if (!Reachability.isConnectedToNetwork()) {
-                self.showConnectionError()
-                return
-            }
-            
-            
-            DropboxAuthManager.sharedAuthManager = DropboxAuthManager(appKey: DROPBOX_APPKEY)
-            Dropbox.authorizedClient = DropboxClient(accessToken: DropboxAccessToken(accessToken: DROPBOX_TOKEN, uid: "aircon.chen.apple@gmail.com"))
-            DropboxClient.sharedClient = Dropbox.authorizedClient
-            
-            
-            
-            if let client = Dropbox.authorizedClient {
-                self.syncPhoto(client)
-            }else{
-                print("網路連線異常!!!")
-                self.title = "網路連線異常..."
-            }
-        }
-        
-        
-        let newsAction = UIAlertAction(title: "最新消息", style: UIAlertActionStyle.Default) { _ in
-            
-            
-            let filePath = self.localNewsFilePath.URLByAppendingPathComponent("news.txt").path!
-            let isFileExist = NSFileManager.defaultManager().fileExistsAtPath(filePath)
-            
-            if isFileExist {
-                do {
-                    let newsContent = try NSString(contentsOfFile: filePath, encoding: NSUTF8StringEncoding)
-                    let newsAlertView = UIAlertView(title: "最新消息", message: "\(newsContent)", delegate: nil, cancelButtonTitle: "我知道了")
-                    
-                    newsAlertView.show()
-                }
-                catch {
-                    print("read news files error: \(error)...")
-                }
-                
-            }else{
-                //檔案不存在
-                print("news file is not exist....")
-            }
-            
-        }
-        
-        let cancelAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: nil)
-        
-        actionController.addAction(newsAction)
-        actionController.addAction(syncAction)
-        actionController.addAction(exportAction)
-        actionController.addAction(cancelAction)
-        
-        presentViewController(actionController, animated: true, completion:nil)
     }
     
     
-    @IBAction func changeImage(sender: AnyObject) {
-        scanLocalPhotoFiles()
-        if localPhotoFiles.count > 0 {
-            
-            if photoIndex == localPhotoFiles.count {
-                self.title = "回到第一張囉"
-                photoIndex = 0
-            }else{
-                self.title = "PTT回文圖產生器"
-            }
-            
-            
-            let readPath = self.localPhotoFilesPath.URLByAppendingPathComponent(localPhotoFiles[photoIndex])
-            let image    = UIImage(contentsOfFile: readPath.path!)
-            self.shibaImageView.image = image
-            photoIndex += 1
-            
+    //MARK: - IBAction
+    
+    @IBAction func fontSizeChange(sender: UISlider) {
+        
+        if textAlignVertical {
+            self.demoLabel.font = UIFont(name: self.demoLabel.font!.fontName, size: CGFloat(sender.value))
+            self.demoTextWidthLayoutConstraint.constant = CGFloat(sender.value)
+            self.demoLabel.layoutIfNeeded()
         }else{
-            if (!Reachability.isConnectedToNetwork()) {
-                self.shibaImageView.image = UIImage(named: "Shiba")
-                let alertView = UIAlertView(title: "請打開網路", message: "同步圖檔才有新的圖片可以用...", delegate: nil, cancelButtonTitle: "我知道了")
-                alertView.show()
-            }else{
-                if let client = Dropbox.authorizedClient {
-                    syncPhoto(client)
-                    syncNews(client)
-                }
-            }
-        
+            self.inputTextView.font = UIFont(name: self.inputTextView.font!.fontName, size: CGFloat(sender.value))
         }
+    }
+
+    
+    @IBAction func modeChange(sender: UIButton) {
         
+        if toolMode == ToolMode.KEYIN {
+            sender.setTitle("畫畫", forState: UIControlState.Normal)
+            toolMode = ToolMode.DRAWING
+            drawingToolbar.hidden = true
+            inputToolbar.hidden = false
+        }else{
+            sender.setTitle("打字", forState: UIControlState.Normal)
+            toolMode = ToolMode.KEYIN
+            drawingToolbar.hidden = false
+            inputToolbar.hidden = true
+        }
+//        let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+//        let inputModeAction = UIAlertAction(title: "打字模式", style: UIAlertActionStyle.Default){ _ in
+//            self.drawingToolbar.hidden = true
+//            self.inputToolbar.hidden = false
+//            self.toolMode = ToolMode.KEYIN
+//        }
+//        let drawingModeAction = UIAlertAction(title: "畫畫模式", style: UIAlertActionStyle.Default){ _ in
+//            self.drawingToolbar.hidden = false
+//            self.inputToolbar.hidden = true
+//            self.toolMode = ToolMode.DRAWING
+//        }
+//        
+//        actionController.addAction(inputModeAction)
+//        actionController.addAction(drawingModeAction)
+//        presentViewController(actionController, animated: true, completion: {})
     }
     
+    
+    @IBAction func changePhotoButtonPressed(sender: UIButton) {
+        let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("photoPickerPopover") as! PhotoPickerViewController
+        popoverVC.modalPresentationStyle = .Popover
+        popoverVC.preferredContentSize = CGSizeMake(UIScreen.mainScreen().bounds.width - 20 , UIScreen.mainScreen().bounds.height - 100)
+        if let popoverController = popoverVC.popoverPresentationController {
+            popoverController.sourceView = sender
+            popoverController.sourceRect = CGRect(x: 0, y: 0, width: 85, height: 30)
+            popoverController.permittedArrowDirections = .Any
+            popoverController.delegate = self
+            popoverVC.delegate = self
+        }
+        presentViewController(popoverVC, animated: true, completion: nil)
+    }
+    
+    
+    
+    
+    
+    @IBAction func exportButtonPressed(sender: UIButton) {
+        inputTextView.backgroundColor = UIColor.clearColor()
+        self.appDelegate.myInterstitial!.presentFromRootViewController(self)
+    }
+    
+    
+    
+    @IBAction func showNewsButtonPressed(sender: UIButton) {
+        appDelegate.showNews()
+    }
+    
+    
+    @IBAction func customPhotoButtonPressed(sender: UIButton) {
+        UIAlertView(title: "開發中", message: "as title...", delegate: nil, cancelButtonTitle: "我知道了").show()
+    }
+
+    
+
     
     
     @IBAction func changeAlign(sender: UIButton) {
         
-        textAlignVertical = !textAlignVertical
         
         
-        if textAlignVertical {
-            sender.setTitle("直式", forState: UIControlState.Normal)
+        let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let verticalModeAction = UIAlertAction(title: "直式", style: UIAlertActionStyle.Default){ _ in
             if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 && self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "你想說什麼"){
                 self.inputTextField.text = self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                 self.demoLabel.text = self.inputTextField.text
             }
             
-//            alignButton.selected = !textAlignVertical
-            demoTextWidthLayoutConstraint.constant = CGFloat(self.demoLabel.font.pointSize)
+            self.demoTextWidthLayoutConstraint.constant = CGFloat(self.demoLabel.font.pointSize)
             self.demoLabel.layoutIfNeeded()
-            
-            demoLabel.hidden = false
-            inputTextView.hidden = true
-            inputTextField.hidden = false
-//            horizontalIntroLabel.hidden = true
-        }else{
-            sender.setTitle("橫式", forState: UIControlState.Normal)
+            self.inputTextView.hidden = true
+            self.demoLabel.hidden = false
+            self.inputTextField.hidden = false
+            self.textAlignVertical = true
+        }
+        
+        
+        let horizontalModeAction = UIAlertAction(title: "橫式", style: UIAlertActionStyle.Default){ _ in
             if (self.inputTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 ){
                 self.inputTextView.text = self.inputTextField.text!
                 self.inputTextView.textColor = UIColor.whiteColor()
@@ -347,16 +404,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
                 self.inputTextView.text = "你想說什麼"
             }
             
-            
             let screenWidth = UIScreen.mainScreen().bounds.size.width
-//            alignButton.selected = !textAlignVertical
-            demoTextWidthLayoutConstraint.constant = screenWidth - 40 - 39
-            
-            demoLabel.hidden = true
-            inputTextView.hidden = false
-            inputTextField.hidden = true
-//            horizontalIntroLabel.hidden = false
+            self.demoTextWidthLayoutConstraint.constant = screenWidth - 40 - 39
+            self.inputTextView.hidden = false
+            self.demoLabel.hidden = true
+            self.inputTextField.hidden = true
+            self.textAlignVertical = false
+
         }
+        
+        actionController.addAction(verticalModeAction)
+        actionController.addAction(horizontalModeAction)
+        presentViewController(actionController, animated: true, completion: {})
         
     }
     
@@ -389,14 +448,39 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     }
     
     
-    func setButtonColor (color: UIColor) {
-        if textAlignVertical{
-            demoLabel.textColor = color
-        }else{
-            inputTextView.textColor = color
-        }
-    }
     
+    
+    @IBAction func drawButtonPressed(sender: UIButton) {
+//        drawMode = !drawMode
+//        if drawMode {
+//            sender.selected = true
+//            if textAlignVertical {
+//                inputTextField.hidden = true
+//            }else{
+//                inputTextView.userInteractionEnabled = false
+//            }
+//            alignButton.enabled = false
+//            fontSizeButton.enabled = false
+//            scrollView.userInteractionEnabled = false
+//            drawComponentView.hidden = false
+//            
+//            drawPreview()
+//        }else{
+//            sender.selected = false
+//            scrollView.userInteractionEnabled = true
+//            if textAlignVertical{
+//                inputTextField.hidden = false
+//            }else{
+//                inputTextView.userInteractionEnabled = true
+//            }
+//            alignButton.enabled = true
+//            fontSizeButton.enabled = true
+//            drawComponentView.hidden = true
+//        }
+    }
+   
+    
+   
     // Override the iPhone behavior that presents a popover as fullscreen
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         // Return no adaptive presentation style, use default presentation behaviour
@@ -463,269 +547,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     
-    // MARK: - Dropbox
-    func syncNews(client:DropboxClient){
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            do{
-                
-                let filePath = self.localNewsFilePath.URLByAppendingPathComponent("news.txt").path!
-                let isFileExist = NSFileManager.defaultManager().fileExistsAtPath(filePath)
-                
-                if isFileExist {
-                    
-                    let fileAttributes = try NSFileManager.defaultManager().attributesOfItemAtPath(filePath)
-                    let fileSize = fileAttributes[NSFileSize]
-                    
-                    //檢查跟線上一樣的檔案 大小是否一樣
-                    client.files.getMetadata(path: "/news.txt").response{response, error in
-                        if let metadata = response {
-                            if metadata.description.rangeOfString("\(fileSize!)") != nil {
-                                print("have the same news file...do nothing")
-
-                            }else{
-                                print("news file is different...")
-                                //delete local file
-                                do {
-                                    print("delete file:\(filePath)...")
-                                    try NSFileManager.defaultManager().removeItemAtPath(filePath)
-                                }
-                                catch let error as NSError {
-                                    print("delete local file wrong: \(error)...")
-                                }
-                                //download from dropbox
-                                self.downloadNewsFromDropbox(client)
-                            }
-                        }else{
-                            print("check metadata from dropbox error:\(error)")
-                        }
-                    }
-
-                }else{
-
-                    //檔案不存在
-                    self.downloadNewsFromDropbox(client)
-                }
-                
-            }
-            catch let error as NSError {
-                print("search local files error: \(error)...")
-            }
-     
-        }
-    }
-    
-    
-    func syncPhoto(client:DropboxClient){
-        newPhotoCounter = 0
-        updatePhotoCounter = 0
-        
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            // do some task
-            dispatch_async(dispatch_get_main_queue()) {
-                self.title = "同步圖檔中..."
-            }
-            //從遠端檢查本機
-            client.files.listFolder(path: "/pics").response { response, error in
-                if let result = response {
-                    if (result.entries.count > 0) {
-                        
-                        for entry in result.entries {
-                            
-                            let filePath = self.localPhotoFilesPath.URLByAppendingPathComponent(entry.name).path!
-                            let isFileExist = NSFileManager.defaultManager().fileExistsAtPath(filePath)
-                        
-                            do {
-                                //1.判斷本機有沒有這個檔案
-                                if isFileExist {
-                                    
-                                    let fileAttributes = try NSFileManager.defaultManager().attributesOfItemAtPath(filePath)
-                                    let fileSize = fileAttributes[NSFileSize]
-                                    
-                                    print("file name:\(self.getFileName(entry.name)) ext:\(self.getFileExt(entry.name))  size:\(fileSize!)")
-                                    
-                                    //檢查跟線上一樣的檔案 大小是否一樣
-                                    client.files.getMetadata(path: "/pics/\(entry.name)").response{response, error in
-                                    
-                                        if let metadata = response {
-                                            if metadata.description.rangeOfString("\(fileSize!)") != nil {
-                                                print("have the same file...do nothing")
-
-                                                
-                                            }else{
-                                                print("file is different...")
-                                                //delete local file
-                                                do {
-                                                    print("delete file:\(filePath)...")
-                                                    try NSFileManager.defaultManager().removeItemAtPath(filePath)
-                                                }
-                                                catch let error as NSError {
-                                                    print("delete local file wrong: \(error)...")
-                                                }
-                                                //download from dropbox
-                                                self.downloadPhotoFromDropbox(client, entry: entry)
-                                                self.updatePhotoCounter += 1
-                                            }
-                                        }else{
-                                            print("check metadata from dropbox error:\(error)")
-                                        }
-                                    }
-
-                                }else{
-                                    //2.沒有就下載
-                                    self.downloadPhotoFromDropbox(client, entry: entry)
-                                    self.newPhotoCounter += 1
-                                }
-                            
-                               self.scanLocalPhotoFiles()
-                            }
-                            catch let error as NSError {
-                                print("error:\(error.description)")
-                            }
-                        }
-                    }
-                } else {
-                    print("listFolder error:\(error!)")
-                }
-
-                self.checkLocalPhoto(client)
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.title = "結束同步圖檔..."
-                }
-            }
-
-        }
-    }
-    
-    
-    func checkLocalPhoto(client:DropboxClient){
-         dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                self.title = "檢查本機圖檔中..."
-            }
-            
-            //從本機檢查遠端
-            do{
-                let files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath((self.localPhotoFilesPath as NSURL).path!)
-                
-                
-                for theFileName in files {
-                    print("check file:\(theFileName)")
-                    
-                    client.files.getMetadata(path: "/pics/\(theFileName)").response{response, error in
-                        
-                        if let metadata = response {
-                            print("online have the file:\(metadata.name)...")
-                        }else{
-                            print("online remove the file:\(theFileName)...")
-                            
-                            do {
-                                print("delete file:\(theFileName)...")
-                                try NSFileManager.defaultManager().removeItemAtPath(self.localPhotoFilesPath.URLByAppendingPathComponent(theFileName).path!)
-                            }
-                            catch let error as NSError {
-                                print("delete local file wrong: \(error)...")
-                            }
-
-                        }
-                    }
-                }
-                
-                self.scanLocalPhotoFiles()
-                
-            }
-            catch let error as NSError {
-                print("search local files error: \(error)...")
-                
-            }
-            
-            
-            
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                if self.newPhotoCounter > 0 && self.updatePhotoCounter  > 0 {
-                    self.title = "新增:\(self.newPhotoCounter),更新:\(self.updatePhotoCounter)"
-                }else if self.newPhotoCounter > 0 {
-                    self.title = "新增\(self.newPhotoCounter)張圖"
-                }else if self.updatePhotoCounter  > 0 {
-                    self.title = "更新\(self.updatePhotoCounter)張圖"
-                }else{
-                    self.title = "圖檔掃描完畢..."
-                }
-            }
-
-        }
-    
-    }
+   
     
     
     
-    func downloadPhotoFromDropbox(client:DropboxClient, entry:Files.Metadata){
-        
-        let destination : (NSURL, NSHTTPURLResponse) -> NSURL = { temporaryURL, response in
-            return self.localPhotoFilesPath.URLByAppendingPathComponent(entry.name)
-        }
-        
-        client.files.download(path: "/pics/\(entry.name)", destination: destination).response { response, error in
-            if let (metadata, _) = response {
-                print("Downloaded photo file name: \(metadata.name)")
-                
-            } else {
-                print(error!)
-            }
-        }
-        
-    }
     
-    
-    func downloadNewsFromDropbox(client:DropboxClient){
-        
-        let destination : (NSURL, NSHTTPURLResponse) -> NSURL = { temporaryURL, response in
-            return self.localNewsFilePath.URLByAppendingPathComponent("news.txt")
-        }
-        client.files.download(path: "/news.txt", destination: destination).response { response, error in
-            
-            if let (metadata, _) = response {
-                print("Downloaded news file name: \(metadata.name) success!!!")
-            } else {
-                print("download news fail:\(error!)")
-            }
-        }
-        
-    }
-    
-    
-    //MARK - FileName 處理
-    func getFileName(fullFileName:String) -> String {
-        return fullFileName.substringToIndex(fullFileName.rangeOfString(".", options: .BackwardsSearch)!.startIndex)
-    }
-    
-    func getFileExt(fullFileName:String) -> String {
-        return fullFileName.substringFromIndex(fullFileName.rangeOfString(".", options: .BackwardsSearch)!.startIndex.successor())
-    }
     
 
-    //MARK 掃描圖檔資料夾
-    func scanLocalPhotoFiles(){
-        do{
-            localPhotoFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.localPhotoFilesPath.path!)
-        }catch{
-            print("scan file error:\(error)")
-        }
-    }
-    
-    
-    
-  
-    func showConnectionError(){
-        let alertView = UIAlertView(title: "網路連線異常", message: "請確認網路連線狀況...", delegate: nil, cancelButtonTitle: "我知道了")
-        alertView.show()
-    }
-    
-
-    
-    
-    
    
 }
+

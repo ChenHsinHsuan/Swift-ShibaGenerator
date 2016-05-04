@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		8F0917CE1CB954E800360455 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0917CD1CB954E800360455 /* Reachability.swift */; };
+		8F248A591CD8E3BB00E6E56B /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F248A581CD8E3BB00E6E56B /* SuperViewController.swift */; };
+		8F248A5C1CD8FD0A00E6E56B /* PhotoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F248A5B1CD8FD0A00E6E56B /* PhotoPickerViewController.swift */; };
+		8F248A5E1CD8FD2500E6E56B /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F248A5D1CD8FD2500E6E56B /* PhotoCollectionViewCell.swift */; };
+		8F248A601CD9014F00E6E56B /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F248A5F1CD9014F00E6E56B /* Photo.swift */; };
 		8F2791971CB96089006880A1 /* colorPalette.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8F2791961CB96089006880A1 /* colorPalette.plist */; };
 		8F2791991CB960A5006880A1 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2791981CB960A5006880A1 /* ColorPickerViewController.swift */; };
 		8F2F200B1C958AFB0083C6FA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2F200A1C958AFB0083C6FA /* AdSupport.framework */; };
@@ -56,6 +60,10 @@
 		74679F82480B8EEF7496B26A /* Pods-ShibaGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.debug.xcconfig"; sourceTree = "<group>"; };
 		82CACE3E7FE00F0E29190C31 /* Pods-ShibaGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShibaGenerator.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShibaGenerator/Pods-ShibaGenerator.release.xcconfig"; sourceTree = "<group>"; };
 		8F0917CD1CB954E800360455 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		8F248A581CD8E3BB00E6E56B /* SuperViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
+		8F248A5B1CD8FD0A00E6E56B /* PhotoPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerViewController.swift; sourceTree = "<group>"; };
+		8F248A5D1CD8FD2500E6E56B /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		8F248A5F1CD9014F00E6E56B /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		8F2791961CB96089006880A1 /* colorPalette.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = colorPalette.plist; path = ShibaGenerator/colorPalette.plist; sourceTree = "<group>"; };
 		8F2791981CB960A5006880A1 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorPickerViewController.swift; path = ShibaGenerator/ColorPickerViewController.swift; sourceTree = "<group>"; };
 		8F2F200A1C958AFB0083C6FA /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -176,9 +184,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8F248A5A1CD8FCE200E6E56B /* PhotoPicker */ = {
+			isa = PBXGroup;
+			children = (
+				8F248A5B1CD8FD0A00E6E56B /* PhotoPickerViewController.swift */,
+				8F248A5D1CD8FD2500E6E56B /* PhotoCollectionViewCell.swift */,
+				8F248A5F1CD9014F00E6E56B /* Photo.swift */,
+			);
+			name = PhotoPicker;
+			sourceTree = "<group>";
+		};
 		8F4C321D1C95178700A3C58A = {
 			isa = PBXGroup;
 			children = (
+				8F248A5A1CD8FCE200E6E56B /* PhotoPicker */,
 				8FDBA04B1CC91E0E0011EDB8 /* FontSizePicker */,
 				8FDBA0231CC7B7F70011EDB8 /* ColorPicker */,
 				8F4C32281C95178700A3C58A /* ShibaGenerator */,
@@ -209,6 +228,7 @@
 				8F4C323B1C9573D600A3C58A /* ResultViewController.swift */,
 				8F4C322D1C95178700A3C58A /* Main.storyboard */,
 				8F0917CD1CB954E800360455 /* Reachability.swift */,
+				8F248A581CD8E3BB00E6E56B /* SuperViewController.swift */,
 			);
 			path = ShibaGenerator;
 			sourceTree = "<group>";
@@ -387,10 +407,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F2791991CB960A5006880A1 /* ColorPickerViewController.swift in Sources */,
+				8F248A5C1CD8FD0A00E6E56B /* PhotoPickerViewController.swift in Sources */,
 				8F4C322C1C95178700A3C58A /* ViewController.swift in Sources */,
 				8FDBA04D1CC91E740011EDB8 /* FontSizePickerViewController.swift in Sources */,
+				8F248A601CD9014F00E6E56B /* Photo.swift in Sources */,
 				8F4C322A1C95178700A3C58A /* AppDelegate.swift in Sources */,
+				8F248A5E1CD8FD2500E6E56B /* PhotoCollectionViewCell.swift in Sources */,
 				8F0917CE1CB954E800360455 /* Reachability.swift in Sources */,
+				8F248A591CD8E3BB00E6E56B /* SuperViewController.swift in Sources */,
 				8F4C323C1C9573D600A3C58A /* ResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -26,7 +26,7 @@ class FontSizePickerViewController: UIViewController {
 
 
     @IBAction func fontSizeChange(sender: UISlider) {
-        delegate?.setFontSize(CGFloat(sender.value))
+//        delegate?.setFontSize(CGFloat(sender.value))
     }
 
     
