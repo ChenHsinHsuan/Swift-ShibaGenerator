@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
     func createAndLoadInterstitial()->GADInterstitial {
         let interstitial = GADInterstitial(adUnitID: "ca-app-pub-5200673733349176/4904876445")
         interstitial.delegate = self
-        interstitial?.loadRequest(GADRequest())
+        interstitial.loadRequest(GADRequest())
         return interstitial
     }
 

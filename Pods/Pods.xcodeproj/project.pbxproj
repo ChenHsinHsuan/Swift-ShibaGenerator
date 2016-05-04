@@ -237,6 +237,7 @@
 		71450D7426B679ED4E740E1F918F7FD1 /* SwiftyDropbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyDropbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73BAE482E1839D0CCF241EE5A0ACE197 /* DropboxUtil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DropboxUtil.swift; path = Source/DropboxUtil.swift; sourceTree = "<group>"; };
 		7489526F3AE25AD2CED8902771B4BADF /* ImgurAnonymousAPIClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ImgurAnonymousAPIClient.m; sourceTree = "<group>"; };
+		7821C830486385944B7196E7702A40CE /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "GoogleMobileAdsSdkiOS-7.8.0/GoogleMobileAds.framework"; sourceTree = "<group>"; };
 		7D4B5BC9B12B3E6C618EE310A8BF7440 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		852D29EFF39C0ADDC2DFB473F6ED90BD /* Pods-ShibaGenerator-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ShibaGenerator-dummy.m"; sourceTree = "<group>"; };
 		8834A3C8F80ECD343E6C57C1F910893A /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVProgressAnimatedView.m; path = SVProgressHUD/SVProgressAnimatedView.m; sourceTree = "<group>"; };
@@ -253,7 +254,6 @@
 		A25FF52EA91323C7076264DAEE0799BB /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		A287DFEE1AB8F1BC97933F843BC76673 /* Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-prefix.pch"; sourceTree = "<group>"; };
 		A69BB30718C51603017F9019D24DC3D9 /* AFAutoPurgingImageCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFAutoPurgingImageCache.h; path = "UIKit+AFNetworking/AFAutoPurgingImageCache.h"; sourceTree = "<group>"; };
-		A745A31602634405606D781806A7B0F2 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "GoogleMobileAdsSdkiOS-7.7.1/GoogleMobileAds.framework"; sourceTree = "<group>"; };
 		A7C752A54FBAF1301BCEEB8847C764E2 /* Upload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Source/Upload.swift; sourceTree = "<group>"; };
 		AA21501A94E4B48FC402E89EF005B55E /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLRequestSerialization.h; path = AFNetworking/AFURLRequestSerialization.h; sourceTree = "<group>"; };
 		AB1659AFCB357B3234D602468EA6D28A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -467,7 +467,7 @@
 		34448155C3D707AF020D72AFB011AFC2 /* Google-Mobile-Ads-SDK */ = {
 			isa = PBXGroup;
 			children = (
-				70DD1643CC03A7DC07AAB80CE12BF800 /* Frameworks */,
+				D911CC38F84F6DA6431438CEF23787C6 /* Frameworks */,
 			);
 			path = "Google-Mobile-Ads-SDK";
 			sourceTree = "<group>";
@@ -536,14 +536,6 @@
 				BAB2B959549E247AF4AE8D174F7BEDBA /* AFURLResponseSerialization.m */,
 			);
 			name = Serialization;
-			sourceTree = "<group>";
-		};
-		70DD1643CC03A7DC07AAB80CE12BF800 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A745A31602634405606D781806A7B0F2 /* GoogleMobileAds.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -674,6 +666,14 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/SwiftyDropbox";
+			sourceTree = "<group>";
+		};
+		D911CC38F84F6DA6431438CEF23787C6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7821C830486385944B7196E7702A40CE /* GoogleMobileAds.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		DA4D83D3EC5D5A7CF9E800E952DFE602 /* Frameworks */ = {
