@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Spring.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SwiftyDropbox.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,7 +42,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>15CE0E9F840909897B5B64710F236227</key>
+		<key>166DD7DFF19A1287F190CE83C4FB14B1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,7 +52,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>68FBCD1951853BC3259153D56AE1ADC9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7CD5CFB780B83300EB08D5B0C6E1548F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -57,12 +72,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E4E445A69678B33A7E7A0805A7697329</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EE1C0AD57A0751AED5605BDFCE6EAD8A</key>
+		<key>C85D5227A0E28F729427716118339161</key>
 		<dict>
 			<key>primary</key>
 			<true/>

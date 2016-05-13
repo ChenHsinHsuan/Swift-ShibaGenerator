@@ -13,8 +13,11 @@ import ImgurAnonymousAPIClient
 import Social
 import SVProgressHUD
 import SystemConfiguration
+import MobileCoreServices
+import AVFoundation
+import Spring
 
-class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, UITextViewDelegate, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelegate, UITextViewDelegate, UIPopoverPresentationControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var componentView: UIView!
@@ -22,9 +25,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     @IBOutlet weak var demoLabel: UILabel!
     @IBOutlet weak var inputTextView: UITextView!
     @IBOutlet weak var demoTextWidthLayoutConstraint: NSLayoutConstraint!
-    
-    
     @IBOutlet weak var inputTextField: UITextField!
+    
     
     
     
@@ -45,9 +47,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     @IBOutlet weak var inputToolbar: UIToolbar!
-    @IBOutlet weak var drawingToolbar: UIToolbar!
     @IBOutlet weak var changePhotoButton: UIButton!
-    
+    @IBOutlet weak var drawingToolView: SpringView!
 
     
     
@@ -58,16 +59,40 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     var tempInputString = ""
 
+    var imagePicker:UIImagePickerController?;
+    
     //for Drawing
-//    @IBOutlet weak var drawImageView: UIImageView!
-//    @IBOutlet weak var tempImageView: UIImageView!
-//    var lastPoint = CGPoint.zero
-//    var red: CGFloat = 255.0
-//    var green: CGFloat = 0.0
-//    var blue: CGFloat = 0.0
-//    var brushWidth: CGFloat = 10.0
-//    var opacity: CGFloat = 1.0
-//    var swiped = false
+    @IBOutlet var pancels: [UIButton]!
+    let colors: [(CGFloat, CGFloat, CGFloat)] = [
+        (0, 0, 0),
+        (105.0 / 255.0, 105.0 / 255.0, 105.0 / 255.0),
+        (1.0, 0, 0),
+        (0, 0, 1.0),
+        (51.0 / 255.0, 204.0 / 255.0, 1.0),
+        (102.0 / 255.0, 204.0 / 255.0, 0),
+        (102.0 / 255.0, 1.0, 0),
+        (160.0 / 255.0, 82.0 / 255.0, 45.0 / 255.0),
+        (1.0, 102.0 / 255.0, 0),
+        (1.0, 1.0, 0),
+        (1.0, 1.0, 1.0),
+        ]
+    var lastPoint = CGPoint.zero
+    var red: CGFloat = 0.0
+    var green: CGFloat = 0.0
+    var blue: CGFloat = 0.0
+    var brushWidth: CGFloat = 10.0
+    var opacity: CGFloat = 1.0
+    var swiped = false
+    var selectedPancel:UIButton?
+    
+    @IBOutlet weak var mainImageView: UIImageView!
+    @IBOutlet weak var tempImageView: UIImageView!
+    
+    @IBOutlet weak var demoBrushImageView: UIImageView!
+    @IBOutlet weak var brushSizeSlider: UISlider!
+    @IBOutlet weak var brushOpacitySlider: UISlider!
+    
+    
 //    var drawMode = false
     
     
@@ -95,6 +120,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         PHPhotoLibrary.requestAuthorization({(status:PHAuthorizationStatus) in
         })
         
+        // ask camera permission
+        AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+        })
         
         if Reachability.isConnectedToNetwork() {
             if let client = Dropbox.authorizedClient {
@@ -117,11 +145,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if(segue.identifier == "ExportSegue"){
-            let resultVC = segue.destinationViewController as! ResultViewController
-            resultVC.exportImage = self.exportImage!
-        }
+//        if(segue.identifier == "ExportSegue"){
+//            let resultVC = segue.destinationViewController as! ResultViewController
+//            resultVC.exportImage = self.exportImage!
+//        }
     }
     
     
@@ -307,33 +334,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
 
     
     @IBAction func modeChange(sender: UIButton) {
-        
         if toolMode == ToolMode.KEYIN {
-            sender.setTitle("畫畫", forState: UIControlState.Normal)
             toolMode = ToolMode.DRAWING
-            drawingToolbar.hidden = true
-            inputToolbar.hidden = false
-        }else{
-            sender.setTitle("打字", forState: UIControlState.Normal)
-            toolMode = ToolMode.KEYIN
-            drawingToolbar.hidden = false
+            
+            
+            for thePancel in pancels {
+                thePancel.frame.origin.y = drawingToolView.frame.height * 0.8
+                if thePancel.tag == 0 {
+                    selectedPancel = thePancel
+                    thePancel.frame.origin.y = drawingToolView.frame.height * 0.6
+                }
+            }
+            drawPreview()
+            
+            drawingToolView.hidden = false
             inputToolbar.hidden = true
+            scrollView.userInteractionEnabled = false
+            sender.setTitle("打字", forState: UIControlState.Normal)
+        }else{
+            toolMode = ToolMode.KEYIN
+            sender.setTitle("畫畫", forState: UIControlState.Normal)
+            drawingToolView.hidden = true
+            inputToolbar.hidden = false
+            scrollView.userInteractionEnabled = true
         }
-//        let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-//        let inputModeAction = UIAlertAction(title: "打字模式", style: UIAlertActionStyle.Default){ _ in
-//            self.drawingToolbar.hidden = true
-//            self.inputToolbar.hidden = false
-//            self.toolMode = ToolMode.KEYIN
-//        }
-//        let drawingModeAction = UIAlertAction(title: "畫畫模式", style: UIAlertActionStyle.Default){ _ in
-//            self.drawingToolbar.hidden = false
-//            self.inputToolbar.hidden = true
-//            self.toolMode = ToolMode.DRAWING
-//        }
-//        
-//        actionController.addAction(inputModeAction)
-//        actionController.addAction(drawingModeAction)
-//        presentViewController(actionController, animated: true, completion: {})
     }
     
     
@@ -368,17 +392,61 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     @IBAction func customPhotoButtonPressed(sender: UIButton) {
-        UIAlertView(title: "開發中", message: "as title...", delegate: nil, cancelButtonTitle: "我知道了").show()
+        
+        let authStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+        if(authStatus == AVAuthorizationStatus.Authorized) {
+            // do your logic
+            let actionController = UIAlertController(title: "請選擇自訂圖檔來源", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let cameraAction = UIAlertAction(title: "立馬拍一張", style: UIAlertActionStyle.Default){ _ in
+                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
+                    self.imagePicker = UIImagePickerController()
+                    self.imagePicker!.delegate = self
+                    self.imagePicker!.mediaTypes = [kUTTypeImage as String]
+                    self.imagePicker!.sourceType = UIImagePickerControllerSourceType.Camera
+                    self.imagePicker!.allowsEditing = true
+                    
+                    self.presentViewController(self.imagePicker!, animated: true, completion: nil)
+                }
+            }
+            
+            
+            let galleryAction = UIAlertAction(title: "從我的相機膠卷挑一張", style: UIAlertActionStyle.Default){ _ in
+                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary){
+                    self.imagePicker = UIImagePickerController()
+                    self.imagePicker!.delegate = self
+                    self.imagePicker!.mediaTypes = [kUTTypeImage as String]
+                    self.imagePicker!.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+                    self.imagePicker!.allowsEditing = true
+                    
+                    self.presentViewController(self.imagePicker!, animated: true, completion: nil)
+                }
+            }
+            
+            let cancelAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Destructive, handler: nil)
+            
+            actionController.addAction(cameraAction)
+            actionController.addAction(galleryAction)
+            actionController.addAction(cancelAction)
+            presentViewController(actionController, animated: true, completion: {})
+
+        }else{
+            UIAlertView(title: "請打開隱私權設定", message:"設定>PTT回文圖產生器 \r\n將照片與相機功能開啟" , delegate: nil, cancelButtonTitle: "我知道了").show()
+            
+        }
     }
 
+    
+    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: NSDictionary!){
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            
+        })
+        shibaImageView.image = image
+    }
     
 
     
     
     @IBAction func changeAlign(sender: UIButton) {
-        
-        
-        
         let actionController = UIAlertController(title: "請選擇", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         let verticalModeAction = UIAlertAction(title: "直式", style: UIAlertActionStyle.Default){ _ in
             if (self.inputTextView.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).characters.count > 0 && self.inputTextView.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "你想說什麼"){
@@ -419,19 +487,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         
     }
     
-    @IBAction func fontSizePikerPressed(sender: UIButton) {
-        let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("fontSizePickerPopover") as! FontSizePickerViewController
-        popoverVC.modalPresentationStyle = .Popover
-        popoverVC.preferredContentSize = CGSizeMake(284, 100)
-        if let popoverController = popoverVC.popoverPresentationController {
-            popoverController.sourceView = sender
-            popoverController.sourceRect = CGRect(x: 0, y: 0, width: 85, height: 30)
-            popoverController.permittedArrowDirections = .Any
-            popoverController.delegate = self
-            popoverVC.delegate = self
-        }
-        presentViewController(popoverVC, animated: true, completion: nil)
-    }
     
     @IBAction func colorPickerButtonPressed(sender: UIButton) {
         let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("colorPickerPopover") as! ColorPickerViewController
@@ -446,39 +501,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
         }
         presentViewController(popoverVC, animated: true, completion: nil)
     }
-    
-    
-    
-    
-    @IBAction func drawButtonPressed(sender: UIButton) {
-//        drawMode = !drawMode
-//        if drawMode {
-//            sender.selected = true
-//            if textAlignVertical {
-//                inputTextField.hidden = true
-//            }else{
-//                inputTextView.userInteractionEnabled = false
-//            }
-//            alignButton.enabled = false
-//            fontSizeButton.enabled = false
-//            scrollView.userInteractionEnabled = false
-//            drawComponentView.hidden = false
-//            
-//            drawPreview()
-//        }else{
-//            sender.selected = false
-//            scrollView.userInteractionEnabled = true
-//            if textAlignVertical{
-//                inputTextField.hidden = false
-//            }else{
-//                inputTextView.userInteractionEnabled = true
-//            }
-//            alignButton.enabled = true
-//            fontSizeButton.enabled = true
-//            drawComponentView.hidden = true
-//        }
-    }
-   
+
     
    
     // Override the iPhone behavior that presents a popover as fullscreen
@@ -547,11 +570,143 @@ class ViewController: UIViewController, UITextFieldDelegate, UIActionSheetDelega
     
     
     
+   //MARK: - Drawing code
    
     
+    @IBAction func colorPenPressed(sender: UIButton) {
+        
+        for thePancel in pancels {
+            thePancel.frame.origin.y = drawingToolView.frame.height * 0.8
+            selectedPancel = nil
+        }
+        
+        sender.frame.origin.y = drawingToolView.frame.height * 0.6
+        selectedPancel = sender
+        
+        var index = sender.tag ?? 0
+        if index < 0 || index >= colors.count {
+            index = 0
+        }
+        
+        (red, green, blue) = colors[index]
+        
+        if index == colors.count - 1 {
+            opacity = 1.0
+        }
+        
+        drawPreview()
+    }
+    
+    
+    func drawPreview() {
+        UIGraphicsBeginImageContext(demoBrushImageView.frame.size)
+        let context = UIGraphicsGetCurrentContext()
+        
+        CGContextSetLineCap(context, CGLineCap.Round)
+        CGContextSetLineWidth(context, CGFloat(brushSizeSlider.value))
+        
+        CGContextSetRGBStrokeColor(context, red, green, blue, CGFloat(brushOpacitySlider.value))
+        CGContextMoveToPoint(context, demoBrushImageView.frame.width/2, demoBrushImageView.frame.height/2)
+        CGContextAddLineToPoint(context, demoBrushImageView.frame.width/2, demoBrushImageView.frame.height/2)
+        CGContextStrokePath(context)
+        demoBrushImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+    }
     
     
     
+    
+    @IBAction func brushValueChange(sender: UISlider) {
+        if sender.tag == 0 {
+            //大小
+            brushWidth = CGFloat(sender.value)
+        }else if sender.tag == 1 {
+            //透明度
+            opacity = CGFloat(sender.value)
+        }
+        drawPreview()
+    }
+    
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        swiped = false
+        print("touchesBegan")
+        if let touch = touches.first{
+            lastPoint = touch.locationInView(self.shibaImageView)
+        }
+        
+        if !swiped {
+            drawLineFrom(lastPoint, toPoint: lastPoint)
+        }
+        
+    }
+    
+    
+    func drawLineFrom(fromPoint: CGPoint, toPoint: CGPoint) {
+        // 1
+        
+        UIGraphicsBeginImageContext(shibaImageView.frame.size)
+        let context = UIGraphicsGetCurrentContext()
+        tempImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: shibaImageView.frame.size.width, height: shibaImageView.frame.size.height))
+        
+        
+        
+
+        // 2
+        CGContextSetLineCap(context, CGLineCap.Round)
+        CGContextSetLineWidth(context, brushWidth)
+        
+//        CGContextSetShouldAntialias(context, true)
+        if selectedPancel?.tag == 10 {
+            CGContextSetBlendMode(context, CGBlendMode.Clear)
+            CGContextSetRGBStrokeColor(context, red, green, blue, 1.0)
+        }else{
+            CGContextSetBlendMode(context, CGBlendMode.Normal)
+            CGContextSetRGBStrokeColor(context, red, green, blue, opacity)
+        }
+        
+        CGContextBeginPath(context)
+        // 3
+        CGContextMoveToPoint(context, fromPoint.x, fromPoint.y)
+        CGContextAddLineToPoint(context, toPoint.x, toPoint.y)
+    
+
+        // 4
+        CGContextStrokePath(context)
+        
+        // 5
+        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+//        tempImageView.alpha = opacity
+        UIGraphicsEndImageContext()
+        
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        // 6
+        swiped = true
+        if let touch = touches.first {
+            let currentPoint = touch.locationInView(self.shibaImageView)
+            drawLineFrom(lastPoint, toPoint: currentPoint)
+            
+            // 7  
+            lastPoint = currentPoint
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if !swiped {
+            drawLineFrom(lastPoint, toPoint: lastPoint)
+        }
+        
+        // Merge tempImageView into mainImageView
+//        UIGraphicsBeginImageContext(shibaImageView.frame.size)
+//        mainImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: mainImageView.frame.size.width, height: mainImageView.frame.size.height), blendMode: CGBlendMode.Normal, alpha: 1.0)
+//        tempImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: tempImageView.frame.size.width, height: tempImageView.frame.size.height), blendMode: CGBlendMode.Normal, alpha: opacity)
+//        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        
+//        tempImageView.image = nil
+    }
     
 
    

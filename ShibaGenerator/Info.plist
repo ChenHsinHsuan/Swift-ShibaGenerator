@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>890</string>
+	<string>1098</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -59,6 +59,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photos</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
