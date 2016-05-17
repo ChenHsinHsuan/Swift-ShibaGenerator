@@ -21,7 +21,7 @@ let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAABrYxZBslgi7DkyChT9Oyv1ZAemjcAxySRo0it6zs
 //let DROPBOX_APPKEY = "dxzz5hggavsa7qp"
 //let DROPBOX_APPSECRET = "pist4gysdf7nrl6"
 //let DROPBOX_TOKEN = "CWJze7MYa9AAAAAAAAAA6D431R694nTLGQD0oMBXNb_K8yA1k-akMOgHdoRqPS2f"
-let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)[0]
 var localPhotoFilesPath:NSURL!
 var localNewsFilePath:NSURL!
 
@@ -55,6 +55,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstitialDelegate {
         
         localPhotoFilesPath = directoryURL.URLByAppendingPathComponent("files")
         localNewsFilePath = directoryURL.URLByAppendingPathComponent("news")
+        print("directoryURL:\(directoryURL)")
+        print("localPhotoFilesPath:\(localPhotoFilesPath)")
+        print("localNewsFilePath:\(localNewsFilePath)")
         do {
             try NSFileManager.defaultManager().createDirectoryAtPath(localPhotoFilesPath.path!, withIntermediateDirectories: true, attributes: nil)
             try NSFileManager.defaultManager().createDirectoryAtPath(localNewsFilePath.path!, withIntermediateDirectories: true, attributes: nil)
