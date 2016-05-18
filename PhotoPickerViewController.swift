@@ -14,19 +14,15 @@ class PhotoPickerViewController: UICollectionViewController {
 
     var delegate: ViewController? = nil
     var localPhotoFiles:[Photo] = []
-    let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-    var localPhotoFilesPath:NSURL!
-    var localNewsFilePath:NSURL!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        localPhotoFilesPath = self.directoryURL.URLByAppendingPathComponent("files")
         
         do{
-            let files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath((self.localPhotoFilesPath as NSURL).path!)
+            let files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath((localPhotoFilesPath as NSURL).path!)
             for theFileName in files {
-               self.localPhotoFiles.append(Photo(iFilePath: self.localPhotoFilesPath.URLByAppendingPathComponent(theFileName).path!, iFileName: theFileName.substringToIndex(theFileName.rangeOfString(".")!.startIndex)))
+               self.localPhotoFiles.append(Photo(iFilePath: localPhotoFilesPath.URLByAppendingPathComponent(theFileName).path!, iFileName: theFileName.substringToIndex(theFileName.rangeOfString(".")!.startIndex)))
             }
         }catch{
             print("load image files fail...")
